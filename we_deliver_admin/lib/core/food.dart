@@ -4,7 +4,7 @@ class Food {
          fprice,
          fdesc,
          fimage,
-         ftime;
+         fowner;
 
   Food (
     {
@@ -13,7 +13,7 @@ class Food {
       this.fprice,
       this.fdesc,
       this.fimage,
-      this.ftime
+      this.fowner,
     }
   );
 

@@ -51,13 +51,6 @@ class _ProfileState extends State<Profile> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: _onBackPressAppBar,
-        ),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
