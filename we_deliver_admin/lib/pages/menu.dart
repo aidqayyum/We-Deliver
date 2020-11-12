@@ -44,17 +44,22 @@ class _MenuState extends State<Menu> {
             appBar: AppBar(
               title: Text('FOOD MENU',
               style: TextStyle(color: Color(0xFF030303))),
-        brightness: Brightness.light,
-        elevation: 0,
-        backgroundColor: Colors.yellow,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.category,
-            color: Colors.black,
-          ),
-          onPressed: (){}),
-        ),
+              brightness: Brightness.light,
+              elevation: 0,
+              backgroundColor: Colors.yellow,
+              centerTitle: true,
+              /*leading: IconButton(
+                icon: Icon(
+                  Icons.category,
+                  color: Colors.black,
+                ),
+                onPressed: (){}),*/
+              actions: <Widget>[
+              IconButton(
+              icon: Icon(Icons.category,
+              color: Colors.black),
+              onPressed: (){}),
+              ]),
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               backgroundColor: Colors.yellow,
@@ -76,7 +81,25 @@ class _MenuState extends State<Menu> {
                       return Container(
                         child: Column(
                           children: <Widget>[
-                            Container(
+                            Stack(children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Center(
+                                    child: Text("We Deliver",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.yellow)),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
+                              ),
+                            ]),
+                            SizedBox(
+                              height: 4,
                             ),
                           ],
                         ),
@@ -85,7 +108,7 @@ class _MenuState extends State<Menu> {
                     if (index == data.length && perpage > 1) {
                       return Container(
                         width: 250,
-                        color: Colors.white,
+                        color: Colors.yellow[300],
                         child: MaterialButton(
                           child: Text(
                             "Load More",
@@ -99,11 +122,11 @@ class _MenuState extends State<Menu> {
                     return Padding(
                       padding: EdgeInsets.all(2.0),
                       child: Card(
-                        elevation: 2,
+                        elevation: 1,
                         child: InkWell(
-                          onLongPress: (){}, /*=> _onDelete(
-                              data[index]['etid'].toString(),
-                              data[index]['ettitle'].toString()),*/
+                          onLongPress: ()=> _onDelete(
+                              data[index]['fid'].toString(),
+                              data[index]['fname'].toString()),
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Row(
@@ -117,7 +140,7 @@ class _MenuState extends State<Menu> {
                                       image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: NetworkImage(
-                                      "http://itschizo.com/aidil_qayyum/srs2/images/${data[index]['etimage']}.jpg")))),
+                                      "http://itschizo.com/aidil_qayyum/srs2/images/${data[index]['fimage']}.jpg")))),
                                 Expanded(
                                   child: Container(
                                     child: Column(
@@ -151,12 +174,12 @@ class _MenuState extends State<Menu> {
   }
 
   Future<String> makeRequest() async {
-    String urlLoadETrash = "http://itschizo.com/aidil_qayyum/srs2/php/load_food.php";
+    String urlLoadFood = "http://itschizo.com/aidil_qayyum/srs2/php/load_food.php";
      ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-        pr.style(message: "Loading All Posted Items");
+        pr.style(message: "Loading All Posted Menu");
     pr.show();
-    http.post(urlLoadETrash, body: {
+    http.post(urlLoadFood, body: {
       "email": widget.admin.email ?? "notavail",
 
     }).then((res) {
@@ -177,7 +200,7 @@ class _MenuState extends State<Menu> {
 
   Future init() async {
     if (widget.admin.email=="user@noregister"){
-      Toast.show("Please register to view posted etrash", context,
+      Toast.show("Please register to view posted here", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }else{

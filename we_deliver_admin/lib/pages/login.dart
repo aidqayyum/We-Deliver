@@ -86,6 +86,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      controller: _emcontroller,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           labelText: 'EMAIL',
                           labelStyle: TextStyle(
@@ -98,6 +100,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20.0),
                     TextField(
+                      controller: _passcontroller,
+                      keyboardType: TextInputType.visiblePassword,
                       decoration: InputDecoration(
                           labelText: 'PASSWORD',
                           labelStyle: TextStyle(
@@ -164,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'New to SRS ?',
+                  'New to We Deliver ?',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 16),
