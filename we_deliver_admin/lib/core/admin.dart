@@ -1,5 +1,5 @@
 class Admin {
-  String name, email, phone, radius, credit,rating, datereg;
+  String name, email, phone, datereg;
 
   Admin({
     this.name, 
