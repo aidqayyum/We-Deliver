@@ -14,6 +14,11 @@ class _FavState extends State<Fav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Center(
+                child: Container(
+                  child: Text('Welcome'),
+                ),
+      ),
     );
   }
 }

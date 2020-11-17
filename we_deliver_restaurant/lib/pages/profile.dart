@@ -64,6 +64,35 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: 20.0,
               ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 120.0,
+                    width: 120.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(60.0),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 3.0,
+                            offset: Offset(0, 4.0),
+                            color: Colors.yellow[600]),
+                      ],
+                      image: new DecorationImage(
+                         fit: BoxFit.cover,
+                         image: new NetworkImage(
+                           "https://oreo.jom.hosting:2083/cpsess9737055175/frontend/paper_lantern/filemanager/showfile.html?file=user%40noregister.jpg&fileop=&dir=%2Fhome2%2Fitschizo%2Fpublic_html%2Faidil_qayyum%2Fsrs2%2Fprofile&dirop=&charset=&file_charset=_DETECT_&baseurl=&basedir="),
+                             //"http://itschizo.com/aidil_qayyum/srs2/profile/${widget.user.email}.jpg?dummy=${(number)}'"),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20.0),
               Text(
                 "Account",
                 style: TextStyle(
@@ -198,7 +227,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.grey,
                         ),
                         MaterialButton(                          
-                          onPressed: (){},                          
+                          onPressed: _gotologout,                          
                           child:Text("Logout",                          
                           style: TextStyle(
                             fontSize: 23.0),

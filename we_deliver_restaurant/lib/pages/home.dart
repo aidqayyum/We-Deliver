@@ -14,6 +14,25 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        brightness: Brightness.light,
+        elevation: 0,
+        backgroundColor: Colors.yellow,
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+          icon: Icon(Icons.search,
+          color: Colors.black),
+          onPressed: (){},
+          ),],
+      ),
+      body: SingleChildScrollView(
+        child:Center(
+                child: Container(
+                  child: Text('Welcome'),
+                ),
+      ),
+      ),
     );
   }
 }
