@@ -7,7 +7,7 @@ import 'package:we_deliver_admin/pages/menu.dart';
 import 'package:we_deliver_admin/pages/home.dart';
 import 'package:we_deliver_admin/pages/profile.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
+String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/admin/get_admin.php";
  int number = 0;
 class MainScreen extends StatefulWidget {
   final Admin admin;

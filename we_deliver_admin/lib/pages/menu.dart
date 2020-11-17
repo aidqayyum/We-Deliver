@@ -8,7 +8,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/register.dart';
-import 'package:we_deliver_admin/small%20pages/addfood.dart';
+import 'package:we_deliver_admin/smallpages/addfood.dart';
 double perpage = 1;
 
 class Menu extends StatefulWidget{

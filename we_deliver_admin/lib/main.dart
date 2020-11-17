@@ -6,7 +6,7 @@ import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/mainscreen.dart';
 
 String _email, _password;
-String urlLogin = "http://itschizo.com/aidil_qayyum/srs2/php/login_admin.php";
+String urlLogin = "http://itschizo.com/aidil_qayyum/srs2/php/admin/login_admin.php";
 
 void main() => runApp(MyApp());
 

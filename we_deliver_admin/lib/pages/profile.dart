@@ -19,7 +19,7 @@ import 'package:we_deliver_admin/pages/mainscreen.dart';
 import 'package:we_deliver_admin/pages/register.dart';
 import 'package:we_deliver_admin/widgets/list.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
+String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/admin/get_admin.php";
 int number = 0;
 class Profile extends StatefulWidget{
   final Admin admin;
@@ -251,16 +251,6 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
-  }
-  Future<bool> _onBackPressAppBar() async {
-    Navigator.pop(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainScreen(
-            //user: widget.user,
-          ),
-        ));
-    return Future.value(false);
   }
 
   void _gotologinPage() {

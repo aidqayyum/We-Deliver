@@ -27,6 +27,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterUserState extends State<RegisterScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +75,7 @@ class RegisterWidget extends StatefulWidget {
 }
 
 class RegisterWidgetState extends State<RegisterWidget> {
+  final picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
         return Column(
@@ -92,7 +94,7 @@ class RegisterWidgetState extends State<RegisterWidget> {
               ],
             ),
           ),
-          GestureDetector(
+          /*GestureDetector(
             onTap: _choose,
             child: Container(
               width: 200,
@@ -105,8 +107,8 @@ class RegisterWidgetState extends State<RegisterWidget> {
                         : FileImage(_image),
                     fit: BoxFit.fill,
                   )),
-            )),
-        Text('Click on image above to take profile picture',),
+            )),*/
+        //Text('Click on image above to take profile picture',),
           Container(
               padding: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
               child: Column(
@@ -213,13 +215,25 @@ class RegisterWidgetState extends State<RegisterWidget> {
                 SizedBox(height: 20.0),
             ]);
       }
-  void _choose() async {
+
+  /*void _choose() async {
+    /*//_image = await picker.getImage(source: ImageSource.gallery);
+    //_image = await picker.getImage(source: ImageSource.gallery);
     // ignore: deprecated_member_use
-    //_image = await ImagePicker.pickImage(source: ImageSource.camera);
+    _image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {});
     // ignore: deprecated_member_use
-    _image = await ImagePicker.pickImage(source: ImageSource.gallery);
-  }
+    _image = await ImagePicker.pickImage(source: ImageSource.gallery);*/
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No Image');
+      }
+    });
+  }*/
   
   void _onRegister() {
     print('onRegister Button from RegisterUser()');
@@ -274,46 +288,6 @@ class RegisterWidgetState extends State<RegisterWidget> {
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     }
   }
-    /*ProgressDialog pr = new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false);
-    await pr.show();
-
-    _name = _namecontroller.text;
-    _email = _emcontroller.text;
-    _password = _passcontroller.text;
-    _phone = _phcontroller.text;
-    print(_image);
-    if ((_image == null) ||
-        (!_isEmailValid(_email)) ||
-        (_password.length < 5) ||
-        (_phone.length < 5)) {
-      Toast.show("Invalid Registration Data", context,
-          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-      return;
-    }
-    String base64Image = base64Encode(_image.readAsBytesSync());
-    http.post(urlUpload, body: {
-      "encoded_string": base64Image,
-      "name": _name,
-      "email": _email,
-      "password": _password,
-      "phone": _phone,
-    }).then((res) {
-      print(res.statusCode);
-      print(res.body);
-      _image = null;
-      _namecontroller.text='';
-      _emcontroller.text = '';
-      _phcontroller.text = '';
-      _passcontroller.text = '';
-      Toast.show(res.body, context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
-    }).catchError((err) {
-      print(err);
-    });
-   await pr.hide();
-  }*/
 
   bool _isEmailValid(String email) {
     return RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);

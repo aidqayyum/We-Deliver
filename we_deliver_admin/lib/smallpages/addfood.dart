@@ -15,7 +15,7 @@ import 'package:we_deliver_admin/pages/menu.dart';
 File _image;
 String pathAsset = 'assets/images/add.png';
 String urlUpload = "http://itschizo.com/aidil_qayyum/srs2/php/upload_food.php";
-String urlgetadmin = "http://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
+String urlgetadmin = "http://itschizo.com/aidil_qayyum/srs2/php/admin/get_admin.php";
 
 TextEditingController _foodcontroller = TextEditingController();
 final TextEditingController _pricecontroller = TextEditingController();
@@ -67,7 +67,7 @@ class _AddFoodState extends State<AddFood> {
         context,
         MaterialPageRoute(
           builder: (context) => Menu(
-            //user: widget.user,
+            admin: widget.admin,
           ),
         ));
     return Future.value(false);
@@ -83,6 +83,8 @@ class AddNewMenu extends StatefulWidget {
 }
 
 class _AddNewMenuState extends State<AddNewMenu> {
+  File _image;
+  final picker = ImagePicker();
   String defaultValue = 'Pickup';
   @override
   void initState() {
@@ -151,11 +153,22 @@ class _AddNewMenuState extends State<AddNewMenu> {
     );
   }
 
-  void _choose() async {
-    // ignore: deprecated_member_use
+  Future _choose() async {
+    /*// ignore: deprecated_member_use
+    //_image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {});
     // ignore: deprecated_member_use
-    _image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    //_image = await ImagePicker.pickImage(source: ImageSource.gallery);*/
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No Image');
+      }
+    });
+
   }
 
   void _onAddMenu() {

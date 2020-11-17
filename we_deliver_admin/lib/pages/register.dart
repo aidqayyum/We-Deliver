@@ -12,7 +12,7 @@ import 'package:we_deliver_admin/pages/login.dart';
 import 'package:we_deliver_admin/pages/mainscreen.dart';
 
 String pathAsset = 'assets/images/profile.jpg';
-String urlUpload = "http://itschizo.com/aidil_qayyum/srs2/php/register_admin.php";
+String urlUpload = "http://itschizo.com/aidil_qayyum/srs2/php/admin/register_admin.php";
 File _image;
 final TextEditingController _namecontroller = TextEditingController();
 final TextEditingController _emcontroller = TextEditingController();
@@ -69,11 +69,13 @@ class _RegisterUserState extends State<RegisterScreen> {
 }
 
 class RegisterWidget extends StatefulWidget {
+  
   @override
   RegisterWidgetState createState() => RegisterWidgetState();
 }
 
 class RegisterWidgetState extends State<RegisterWidget> {
+  final picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
         return Column(
@@ -216,9 +218,15 @@ class RegisterWidgetState extends State<RegisterWidget> {
   void _choose() async {
     // ignore: deprecated_member_use
     //_image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {});
-    // ignore: deprecated_member_use
-    _image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No Image');
+      }
+    });
   }
   
   void _onRegister() {
