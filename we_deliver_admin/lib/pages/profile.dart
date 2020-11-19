@@ -19,17 +19,18 @@ import 'package:we_deliver_admin/pages/mainscreen.dart';
 import 'package:we_deliver_admin/pages/register.dart';
 import 'package:we_deliver_admin/widgets/list.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/admin/get_admin.php";
+String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
 int number = 0;
-class Profile extends StatefulWidget{
+
+class Profile extends StatefulWidget {
   final Admin admin;
 
   Profile({Key key, this.admin});
-  
+
   @override
   _ProfileState createState() => _ProfileState();
 }
- 
+
 class _ProfileState extends State<Profile> {
   GlobalKey<RefreshIndicatorState> refreshKey;
 
@@ -43,6 +44,7 @@ class _ProfileState extends State<Profile> {
     refreshKey = GlobalKey<RefreshIndicatorState>();
     _getCurrentLocation();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,9 +87,9 @@ class _ProfileState extends State<Profile> {
                             color: Colors.black38),
                       ],
                       image: new DecorationImage(
-                         fit: BoxFit.cover,
-                         image: new NetworkImage(
-                             "http://itschizo.com/aidil_qayyum/srs2/profile/${widget.admin.email}.jpg?dummy=${(number)}'"),
+                        fit: BoxFit.cover,
+                        image: new NetworkImage(
+                            "https://itschizo.com/aidil_qayyum/srs2/profile/${widget.admin.email}.jpg?dummy=${(number)}'"),
                       ),
                     ),
                   ),
@@ -97,16 +99,16 @@ class _ProfileState extends State<Profile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.admin.name?.toUpperCase() ?? 'Not register',
+                      Text(
+                        widget.admin.name?.toUpperCase() ?? 'Not register',
                         style: TextStyle(
                           fontSize: 20.0,
                         ),
                       ),
                       SizedBox(height: 10.0),
-                      Text(widget.admin.phone ?? 'Not register',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey),
+                      Text(
+                        widget.admin.phone ?? 'Not register',
+                        style: TextStyle(fontSize: 20, color: Colors.grey),
                       ),
                       SizedBox(height: 20.0),
                     ],
@@ -139,18 +141,21 @@ class _ProfileState extends State<Profile> {
                         color: Colors.grey,
                       ),
                       Center(
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                           Icons.location_on,
-                           color: Colors.yellow,),
-                          SizedBox(width: 20,),
-                          Flexible(
-                             child: Text(_currentAddress),                             
-                          ),
-                        ],
-                       ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.location_on,
+                              color: Colors.yellow,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Flexible(
+                              child: Text(_currentAddress),
+                            ),
+                          ],
+                        ),
                       ),
                       Divider(
                         height: 10.0,
@@ -198,44 +203,38 @@ class _ProfileState extends State<Profile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         MaterialButton(
-                          onPressed: _gotologinPage,
-                          child:Text("Login",
-                          style: TextStyle(
-                            fontSize: 20.0)
-                          )),
+                            onPressed: _gotologinPage,
+                            child: Text("Login",
+                                style: TextStyle(fontSize: 20.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 30.0,
                           color: Colors.grey,
                         ),
                         MaterialButton(
-                          onPressed: _gotoRegisterPage,
-                          child:Text("Register",
-                          style: TextStyle(
-                            fontSize: 20.0)
-                          )),
-                        // SizedBox(height: 10.0,),
-                        Divider(
-                          height: 30.0,
-                          color: Colors.grey,
-                        ),
-                        MaterialButton(                          
-                          onPressed: (){},                          
-                          child:Text("Logout",                          
-                          style: TextStyle(
-                            fontSize: 18.0),
-                          )),
+                            onPressed: _gotoRegisterPage,
+                            child: Text("Register",
+                                style: TextStyle(fontSize: 20.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 30.0,
                           color: Colors.grey,
                         ),
                         MaterialButton(
-                          onPressed: (){},
-                          child:Text("Exit      ",
-                          style: TextStyle(
-                            fontSize: 18.0)
-                          )),
+                            onPressed: () {},
+                            child: Text(
+                              "Logout",
+                              style: TextStyle(fontSize: 18.0),
+                            )),
+                        // SizedBox(height: 10.0,),
+                        Divider(
+                          height: 30.0,
+                          color: Colors.grey,
+                        ),
+                        MaterialButton(
+                            onPressed: () {},
+                            child: Text("Exit      ",
+                                style: TextStyle(fontSize: 18.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 30.0,
@@ -286,6 +285,7 @@ class _ProfileState extends State<Profile> {
       },
     );
   }
+
   void _gotoRegisterPage() {
     // flutter defined function
     //print(widget.user.name);
@@ -333,6 +333,7 @@ class _ProfileState extends State<Profile> {
       print(e);
     });
   }
+
   _getAddressFromLatLng() async {
     try {
       List<Placemark> p = await geolocator.placemarkFromCoordinates(

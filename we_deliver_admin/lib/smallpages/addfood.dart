@@ -14,8 +14,8 @@ import 'package:we_deliver_admin/pages/menu.dart';
 
 File _image;
 String pathAsset = 'assets/images/add.png';
-String urlUpload = "http://itschizo.com/aidil_qayyum/srs2/php/upload_food.php";
-String urlgetadmin = "http://itschizo.com/aidil_qayyum/srs2/php/admin/get_admin.php";
+String urlUpload = "https://itschizo.com/aidil_qayyum/srs2/php/upload_food.php";
+String urlgetadmin = "https://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
 
 TextEditingController _foodcontroller = TextEditingController();
 final TextEditingController _pricecontroller = TextEditingController();
@@ -24,15 +24,15 @@ final TextEditingController _desccontroller = TextEditingController();
 //Position _currentPosition;
 //String _currentAddress = "Searching your current location...";
 
-class AddFood extends StatefulWidget{
+class AddFood extends StatefulWidget {
   final Admin admin;
 
   AddFood({Key key, this.admin});
-  
+
   @override
   _AddFoodState createState() => _AddFoodState();
 }
- 
+
 class _AddFoodState extends State<AddFood> {
   @override
   Widget build(BuildContext context) {
@@ -41,27 +41,25 @@ class _AddFoodState extends State<AddFood> {
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-        title: Text('ADD MENU',
-        style: TextStyle(color: Color(0xFF030303))),
-        brightness: Brightness.light,
-        elevation: 0,
-        backgroundColor: Colors.yellow,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black),
-            onPressed: _onBackPressAppBar),
+          title: Text('ADD MENU', style: TextStyle(color: Color(0xFF030303))),
+          brightness: Brightness.light,
+          elevation: 0,
+          backgroundColor: Colors.yellow,
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: _onBackPressAppBar),
         ),
         body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-              child: AddNewMenu(widget.admin),
-            ),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+            child: AddNewMenu(widget.admin),
           ),
+        ),
       ),
     );
   }
+
   Future<bool> _onBackPressAppBar() async {
     Navigator.pop(
         context,
@@ -76,14 +74,13 @@ class _AddFoodState extends State<AddFood> {
 
 class AddNewMenu extends StatefulWidget {
   final Admin admin;
-  AddNewMenu (this.admin);
+  AddNewMenu(this.admin);
 
   @override
-  _AddNewMenuState createState()=> _AddNewMenuState();
+  _AddNewMenuState createState() => _AddNewMenuState();
 }
 
 class _AddNewMenuState extends State<AddNewMenu> {
-  File _image;
   final picker = ImagePicker();
   String defaultValue = 'Pickup';
   @override
@@ -97,9 +94,9 @@ class _AddNewMenuState extends State<AddNewMenu> {
     return Column(
       children: <Widget>[
         GestureDetector(
-          onTap: _choose,
-          child: Container(
-            width: 220,
+            onTap: _choose,
+            child: Container(
+              width: 220,
               height: 250,
               decoration: BoxDecoration(
                   image: DecorationImage(
@@ -107,47 +104,44 @@ class _AddNewMenuState extends State<AddNewMenu> {
                     _image == null ? AssetImage(pathAsset) : FileImage(_image),
                 fit: BoxFit.fill,
               )),
-          )),
-          SizedBox(
-            height: 10.0),
-          Text('Click on image above to take picture'),
-          TextField(
+            )),
+        SizedBox(height: 10.0),
+        Text('Click on image above to take picture'),
+        TextField(
             controller: _foodcontroller,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: "Food Name",
               icon: Icon(Icons.restaurant_menu),
             )),
-          TextField(
+        TextField(
             controller: _pricecontroller,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: "Food Price",
               icon: Icon(Icons.attach_money),
             )),
-          TextField(
-            controller: _desccontroller,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Food Description",
-              icon: Icon(Icons.info_outline),
-            ),
-            ),
-          SizedBox(
-            height: 20.0),
-          MaterialButton(
+        TextField(
+          controller: _desccontroller,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            labelText: "Food Description",
+            icon: Icon(Icons.info_outline),
+          ),
+        ),
+        SizedBox(height: 20.0),
+        MaterialButton(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)),
-              minWidth: 400,
-              height: 50,
-              child: Text("Add Food",
-              style: new TextStyle(
-              fontSize: 18.0,
-              color: Colors.black),
-              ),
-              color: Colors.yellow,
-              //textColor: Colors.black,
-              elevation: 10,
+                borderRadius: BorderRadius.circular(20.0)),
+            minWidth: 400,
+            height: 50,
+            child: Text(
+              "Add Food",
+              style: new TextStyle(fontSize: 18.0, color: Colors.black),
+            ),
+            color: Colors.yellow,
+            //textColor: Colors.black,
+            elevation: 10,
             onPressed: _onAddMenu),
       ],
     );
@@ -159,7 +153,7 @@ class _AddNewMenuState extends State<AddNewMenu> {
     setState(() {});
     // ignore: deprecated_member_use
     //_image = await ImagePicker.pickImage(source: ImageSource.gallery);*/
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
 
     setState(() {
       if (pickedFile != null) {
@@ -168,28 +162,27 @@ class _AddNewMenuState extends State<AddNewMenu> {
         print('No Image');
       }
     });
-
   }
 
   void _onAddMenu() {
     if (_image == null) {
       Toast.show("Please take picture", context,
-      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     if (_foodcontroller.text.isEmpty) {
       Toast.show("Please enter food name", context,
-      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     if (_pricecontroller.text.isEmpty) {
       Toast.show("Please enter food price", context,
-      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     if (_desccontroller.text.isEmpty) {
       Toast.show("Please enter food description", context,
-      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     ProgressDialog pr = new ProgressDialog(context,
@@ -204,45 +197,42 @@ class _AddNewMenuState extends State<AddNewMenu> {
       "fname": _foodcontroller.text,
       "fprice": _pricecontroller.text,
       "fdesc": _desccontroller.text
-      }).then((res) {
-        print(res.body);
-        Toast.show(res.body, context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-            if (res.body.contains("success")) {
-              _image = null;
-              _foodcontroller.text = "";
-              _pricecontroller.text = "";
-              _desccontroller.text = "";
-              pr.hide();
-              print(widget.admin.email);
-              _onLogin(widget.admin.email, context);
-            } else {
-              pr.hide();
-              Toast.show(res.body + ". Please reload", context,
-                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-            }
-      }).catchError((err){
-        print(err);
+    }).then((res) {
+      print(res.body);
+      Toast.show(res.body, context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      if (res.body.contains("success")) {
+        _image = null;
+        _foodcontroller.text = "";
+        _pricecontroller.text = "";
+        _desccontroller.text = "";
         pr.hide();
+        print(widget.admin.email);
+        _onLogin(widget.admin.email, context);
+      } else {
+        pr.hide();
+        Toast.show(res.body + ". Please reload", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    }).catchError((err) {
+      print(err);
+      pr.hide();
     });
-    }
-  
+  }
+
   void _onLogin(String email, BuildContext ctx) {
     http.post(urlgetadmin, body: {
       "email": email,
-    }).then((res){
+    }).then((res) {
       print(res.statusCode);
       var string = res.body;
       List dres = string.split(",");
       print(dres);
       if (dres[0] == "success") {
-        Admin admin = new Admin(
-          name: dres[1],
-          email: dres[2],
-          phone: dres[3]);
+        Admin admin = new Admin(name: dres[1], email: dres[2], phone: dres[3]);
         Navigator.push(ctx,
-          MaterialPageRoute(builder: (context) => MainScreen(admin: admin)));
-        }
+            MaterialPageRoute(builder: (context) => MainScreen(admin: admin)));
+      }
     }).catchError((err) {
       print(err);
     });

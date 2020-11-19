@@ -7,8 +7,9 @@ import 'package:we_deliver_admin/pages/menu.dart';
 import 'package:we_deliver_admin/pages/home.dart';
 import 'package:we_deliver_admin/pages/profile.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/admin/get_admin.php";
- int number = 0;
+String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
+int number = 0;
+
 class MainScreen extends StatefulWidget {
   final Admin admin;
 
@@ -150,22 +151,27 @@ class _MainScreenState extends State<MainScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         type: BottomNavigationBarType.fixed,
-
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
             title: Text("Dashboard"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant_menu, ),
+            icon: Icon(
+              Icons.restaurant_menu,
+            ),
             title: Text("Menu"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart, ),
+            icon: Icon(
+              Icons.shopping_cart,
+            ),
             title: Text("Order"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, ),
+            icon: Icon(
+              Icons.person,
+            ),
             title: Text("Profile"),
           )
         ],

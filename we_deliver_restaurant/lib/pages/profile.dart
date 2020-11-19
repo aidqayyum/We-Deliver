@@ -17,18 +17,20 @@ import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 import 'package:we_deliver_restaurant/pages/register.dart';
 import 'package:we_deliver_restaurant/pages/setting.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/user/get_user.php";
-String urlupdate = "http://itschizo.com/aidil_qayyum/srs2/php/user/update_profile.php";
+String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
+String urlupdate =
+    "https://itschizo.com/aidil_qayyum/srs2/php/update_profile.php";
 int number = 0;
-class Profile extends StatefulWidget{
+
+class Profile extends StatefulWidget {
   final User user;
 
   Profile({Key key, this.user});
-  
+
   @override
   _ProfileState createState() => _ProfileState();
 }
- 
+
 class _ProfileState extends State<Profile> {
   GlobalKey<RefreshIndicatorState> refreshKey;
 
@@ -42,14 +44,16 @@ class _ProfileState extends State<Profile> {
     refreshKey = GlobalKey<RefreshIndicatorState>();
     _getCurrentLocation();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('PROFILE',
-        style: TextStyle(color: Color(0xFF030303),
-        fontSize: 25,
-        fontFamily: 'Montserrat')),
+            style: TextStyle(
+                color: Color(0xFF030303),
+                fontSize: 25,
+                fontFamily: 'Montserrat')),
         brightness: Brightness.light,
         elevation: 0,
         backgroundColor: Colors.yellow,
@@ -83,10 +87,9 @@ class _ProfileState extends State<Profile> {
                             color: Colors.yellow[600]),
                       ],
                       image: new DecorationImage(
-                         fit: BoxFit.cover,
-                         image: new NetworkImage(
-                           "https://oreo.jom.hosting:2083/cpsess9737055175/frontend/paper_lantern/filemanager/showfile.html?file=user%40noregister.jpg&fileop=&dir=%2Fhome2%2Fitschizo%2Fpublic_html%2Faidil_qayyum%2Fsrs2%2Fprofile&dirop=&charset=&file_charset=_DETECT_&baseurl=&basedir="),
-                             //"http://itschizo.com/aidil_qayyum/srs2/profile/${widget.user.email}.jpg?dummy=${(number)}'"),
+                        fit: BoxFit.cover,
+                        image: new NetworkImage(
+                            "https://itschizo.com/aidil_qayyum/srs2/profile/${widget.user.email}.jpg?dummy=${(number)}'"),
                       ),
                     ),
                   ),
@@ -108,12 +111,17 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: <Widget>[
                       ListTile(
-                        leading: Icon(Icons.person,
-                        color: Colors.yellow,),
-                        trailing: Icon(Icons.arrow_right,
-                        color: Colors.black,),
-                        title: Text( widget.user.name?.toUpperCase() ?? 'Not register',
-                        style: TextStyle(fontSize: 20.0)),
+                        leading: Icon(
+                          Icons.person,
+                          color: Colors.yellow,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_right,
+                          color: Colors.black,
+                        ),
+                        title: Text(
+                            widget.user.name?.toUpperCase() ?? 'Not register',
+                            style: TextStyle(fontSize: 20.0)),
                         onTap: _changeName,
                       ),
                       Divider(
@@ -121,12 +129,16 @@ class _ProfileState extends State<Profile> {
                         color: Colors.grey,
                       ),
                       ListTile(
-                        leading: Icon(Icons.phone_android,
-                        color: Colors.yellow,),
-                        trailing: Icon(Icons.arrow_right,
-                        color: Colors.black,),
+                        leading: Icon(
+                          Icons.phone_android,
+                          color: Colors.yellow,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_right,
+                          color: Colors.black,
+                        ),
                         title: Text(widget.user.phone ?? 'Not register',
-                        style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 20.0)),
                         onTap: _changePhone,
                       ),
                       Divider(
@@ -134,34 +146,44 @@ class _ProfileState extends State<Profile> {
                         color: Colors.grey,
                       ),
                       ListTile(
-                        leading: Icon(Icons.email,
-                        color: Colors.yellow,),
+                        leading: Icon(
+                          Icons.email,
+                          color: Colors.yellow,
+                        ),
                         title: Text(widget.user.email ?? 'Not register',
-                        style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 20.0)),
                       ),
                       Divider(
                         height: 10.0,
                         color: Colors.grey,
                       ),
                       ListTile(
-                        leading: Icon(Icons.location_on,
-                        color: Colors.yellow,),
-                        trailing: Icon(Icons.arrow_right,
-                        color: Colors.black,),
+                        leading: Icon(
+                          Icons.location_on,
+                          color: Colors.yellow,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_right,
+                          color: Colors.black,
+                        ),
                         title: Text(_currentAddress,
-                        style: TextStyle(fontSize: 20.0)),                            
+                            style: TextStyle(fontSize: 20.0)),
                       ),
                       Divider(
                         height: 10.0,
                         color: Colors.grey,
                       ),
                       ListTile(
-                        leading: Icon(Icons.visibility,
-                        color: Colors.yellow,),
-                        trailing: Icon(Icons.arrow_right,
-                        color: Colors.black,),
-                        title: Text("Password",
-                        style: TextStyle(fontSize: 20.0)),
+                        leading: Icon(
+                          Icons.visibility,
+                          color: Colors.yellow,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_right,
+                          color: Colors.black,
+                        ),
+                        title:
+                            Text("Password", style: TextStyle(fontSize: 20.0)),
                         onTap: _changePassword,
                       ),
                       Divider(
@@ -169,11 +191,13 @@ class _ProfileState extends State<Profile> {
                         color: Colors.grey,
                       ),
                       ListTile(
-                        leading: Icon(Icons.payment,
-                        color: Colors.yellow,),
-                        title: Text("Payment",
-                        style: TextStyle(fontSize: 20.0)),
-                        onTap: (){},
+                        leading: Icon(
+                          Icons.payment,
+                          color: Colors.yellow,
+                        ),
+                        title:
+                            Text("Payment", style: TextStyle(fontSize: 20.0)),
+                        onTap: () {},
                       ),
                       Divider(
                         height: 10.0,
@@ -205,44 +229,38 @@ class _ProfileState extends State<Profile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         MaterialButton(
-                          onPressed: _gotologinPage,
-                          child:Text("Login",
-                          style: TextStyle(
-                            fontSize: 23.0)
-                          )),
+                            onPressed: _gotologinPage,
+                            child: Text("Login",
+                                style: TextStyle(fontSize: 23.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
                           color: Colors.grey,
                         ),
                         MaterialButton(
-                          onPressed: _gotoRegisterPage,
-                          child:Text("Register",
-                          style: TextStyle(
-                            fontSize: 23.0)
-                          )),
-                        // SizedBox(height: 10.0,),
-                        Divider(
-                          height: 20.0,
-                          color: Colors.grey,
-                        ),
-                        MaterialButton(                          
-                          onPressed: _gotologout,                          
-                          child:Text("Logout",                          
-                          style: TextStyle(
-                            fontSize: 23.0),
-                          )),
+                            onPressed: _gotoRegisterPage,
+                            child: Text("Register",
+                                style: TextStyle(fontSize: 23.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
                           color: Colors.grey,
                         ),
                         MaterialButton(
-                          onPressed: (){},
-                          child:Text("Exit      ",
-                          style: TextStyle(
-                            fontSize: 23.0)
-                          )),
+                            onPressed: _gotologout,
+                            child: Text(
+                              "Logout",
+                              style: TextStyle(fontSize: 23.0),
+                            )),
+                        // SizedBox(height: 10.0,),
+                        Divider(
+                          height: 20.0,
+                          color: Colors.grey,
+                        ),
+                        MaterialButton(
+                            onPressed: () {},
+                            child: Text("Exit      ",
+                                style: TextStyle(fontSize: 23.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
@@ -293,6 +311,7 @@ class _ProfileState extends State<Profile> {
       },
     );
   }
+
   void _gotoRegisterPage() {
     // flutter defined function
     //print(widget.user.name);
@@ -540,6 +559,7 @@ class _ProfileState extends State<Profile> {
       print(e);
     });
   }
+
   _getAddressFromLatLng() async {
     try {
       List<Placemark> p = await geolocator.placemarkFromCoordinates(
@@ -562,6 +582,7 @@ class _ProfileState extends State<Profile> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('pass', pass);
   }
+
   void _gotologout() async {
     // flutter defined function
     print(widget.user.name);
@@ -582,8 +603,8 @@ class _ProfileState extends State<Profile> {
                 await prefs.setString('email', '');
                 await prefs.setString('pass', '');
                 print("LOGOUT");
-                Navigator.pop(context,
-                    MaterialPageRoute(builder: (context) => MyApp()));
+                Navigator.pop(
+                    context, MaterialPageRoute(builder: (context) => MyApp()));
               },
             ),
             new FlatButton(
@@ -597,5 +618,4 @@ class _ProfileState extends State<Profile> {
       },
     );
   }
-
 }

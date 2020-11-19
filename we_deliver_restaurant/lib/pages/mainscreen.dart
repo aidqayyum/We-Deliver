@@ -6,8 +6,9 @@ import 'package:we_deliver_restaurant/pages/favourite.dart';
 import 'package:we_deliver_restaurant/pages/home.dart';
 import 'package:we_deliver_restaurant/pages/profile.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/user/get_user.php";
- int number = 0;
+String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
+int number = 0;
+
 class MainScreen extends StatefulWidget {
   final User user;
 
@@ -149,22 +150,27 @@ class _MainScreenState extends State<MainScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         type: BottomNavigationBarType.fixed,
-
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text("Home"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite, ),
+            icon: Icon(
+              Icons.favorite,
+            ),
             title: Text("Favourite"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart, ),
+            icon: Icon(
+              Icons.shopping_cart,
+            ),
             title: Text("Cart"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, ),
+            icon: Icon(
+              Icons.person,
+            ),
             title: Text("Profile"),
           )
         ],

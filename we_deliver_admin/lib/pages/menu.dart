@@ -9,20 +9,21 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/register.dart';
 import 'package:we_deliver_admin/smallpages/addfood.dart';
+
 double perpage = 1;
 
-class Menu extends StatefulWidget{
+class Menu extends StatefulWidget {
   final Admin admin;
 
   Menu({Key key, this.admin});
-  
+
   @override
-  _MenuState createState() =>_MenuState();
+  _MenuState createState() => _MenuState();
 }
- 
+
 class _MenuState extends State<Menu> {
   GlobalKey<RefreshIndicatorState> refreshKey;
-  
+
   //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   //Position _currentPosition;
   //String _currentAddress = "Searching current location...";
@@ -35,31 +36,31 @@ class _MenuState extends State<Menu> {
     refreshKey = GlobalKey<RefreshIndicatorState>();
     //_getCurrentLocation();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             resizeToAvoidBottomPadding: false,
             appBar: AppBar(
-              title: Text('FOOD MENU',
-              style: TextStyle(color: Color(0xFF030303))),
-              brightness: Brightness.light,
-              elevation: 0,
-              backgroundColor: Colors.yellow,
-              centerTitle: true,
-              /*leading: IconButton(
+                title: Text('FOOD MENU',
+                    style: TextStyle(color: Color(0xFF030303))),
+                brightness: Brightness.light,
+                elevation: 0,
+                backgroundColor: Colors.yellow,
+                centerTitle: true,
+                /*leading: IconButton(
                 icon: Icon(
                   Icons.category,
                   color: Colors.black,
                 ),
                 onPressed: (){}),*/
-              actions: <Widget>[
-              IconButton(
-              icon: Icon(Icons.category,
-              color: Colors.black),
-              onPressed: (){}),
-              ]),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.category, color: Colors.black),
+                      onPressed: () {}),
+                ]),
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               backgroundColor: Colors.yellow,
@@ -124,23 +125,23 @@ class _MenuState extends State<Menu> {
                       child: Card(
                         elevation: 1,
                         child: InkWell(
-                          onLongPress: ()=> _onDelete(
+                          onLongPress: () => _onDelete(
                               data[index]['fid'].toString(),
                               data[index]['fname'].toString()),
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Row(
                               children: <Widget>[
-                                 Container(
-                                  height: 120,
-                                  width: 110,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                      //border: Border.all(color: Colors.deepOrangeAccent,width:3),
-                                      image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      "http://itschizo.com/aidil_qayyum/srs2/images/${data[index]['fimage']}.jpg")))),
+                                Container(
+                                    height: 120,
+                                    width: 110,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        //border: Border.all(color: Colors.deepOrangeAccent,width:3),
+                                        image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: NetworkImage(
+                                                "https://itschizo.com/aidil_qayyum/srs2/images/${data[index]['fimage']}.jpg")))),
                                 Expanded(
                                   child: Container(
                                     child: Column(
@@ -170,18 +171,18 @@ class _MenuState extends State<Menu> {
                       ),
                     );
                   }),
-    )));
+            )));
   }
 
   Future<String> makeRequest() async {
-    String urlLoadFood = "http://itschizo.com/aidil_qayyum/srs2/php/load_food.php";
-     ProgressDialog pr = new ProgressDialog(context,
+    String urlLoadFood =
+        "https://itschizo.com/aidil_qayyum/srs2/php/load_food.php";
+    ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-        pr.style(message: "Loading All Posted Menu");
+    pr.style(message: "Loading All Posted Menu");
     pr.show();
     http.post(urlLoadFood, body: {
       "email": widget.admin.email ?? "notavail",
-
     }).then((res) {
       setState(() {
         var extractdata = json.decode(res.body);
@@ -199,11 +200,11 @@ class _MenuState extends State<Menu> {
   }
 
   Future init() async {
-    if (widget.admin.email=="user@noregister"){
+    if (widget.admin.email == "user@noregister") {
       Toast.show("Please register to view posted here", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
-    }else{
+    } else {
       this.makeRequest();
     }
   }
@@ -269,7 +270,8 @@ class _MenuState extends State<Menu> {
   }
 
   Future<String> deleteRequest(String fid) async {
-    String urlLoadFood = "http://itschizo.com/aidil_qayyum/srs2/php/delete_food.php";
+    String urlLoadFood =
+        "https://itschizo.com/aidil_qayyum/srs2/php/delete_food.php";
     ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
     pr.style(message: "Deleting Food");
@@ -304,13 +306,15 @@ class SlideMenu extends StatefulWidget {
   _SlideMenuState createState() => new _SlideMenuState();
 }
 
-class _SlideMenuState extends State<SlideMenu> with SingleTickerProviderStateMixin {
+class _SlideMenuState extends State<SlideMenu>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   @override
   initState() {
     super.initState();
-    _controller = new AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _controller = new AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
   }
 
   @override
@@ -322,9 +326,8 @@ class _SlideMenuState extends State<SlideMenu> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final animation = new Tween(
-      begin: const Offset(0.0, 0.0),
-      end: const Offset(-0.2, 0.0)
-    ).animate(new CurveTween(curve: Curves.decelerate).animate(_controller));
+            begin: const Offset(0.0, 0.0), end: const Offset(-0.2, 0.0))
+        .animate(new CurveTween(curve: Curves.decelerate).animate(_controller));
 
     return new GestureDetector(
       onHorizontalDragUpdate: (data) {
@@ -335,8 +338,11 @@ class _SlideMenuState extends State<SlideMenu> with SingleTickerProviderStateMix
       },
       onHorizontalDragEnd: (data) {
         if (data.primaryVelocity > 2500)
-          _controller.animateTo(.0); //close menu on fast swipe in the right direction
-        else if (_controller.value >= .5 || data.primaryVelocity < -2500) // fully open if dragged a lot to left or on fast swipe to left
+          _controller
+              .animateTo(.0); //close menu on fast swipe in the right direction
+        else if (_controller.value >= .5 ||
+            data.primaryVelocity <
+                -2500) // fully open if dragged a lot to left or on fast swipe to left
           _controller.animateTo(1.0);
         else // close if none of above
           _controller.animateTo(.0);

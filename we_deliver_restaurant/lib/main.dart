@@ -6,7 +6,8 @@ import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 
 String _email, _password;
-String urlLogin = "http://itschizo.com/aidil_qayyum/srs2/php/user/login_user.php";
+String urlLogin =
+    "https://itschizo.com/aidil_qayyum/srs2/php/user/login_user.php";
 
 void main() => runApp(MyApp());
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.yellow));
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -75,9 +76,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
   Widget build(BuildContext context) {
     return new Center(
         child: new Container(
-      child: CircularProgressIndicator(
-        
-      ),
+      child: CircularProgressIndicator(),
     ));
   }
 }
@@ -85,20 +84,18 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
 void loadpref(BuildContext ctx) async {
   print('Inside loadpref()');
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  _email = (prefs.getString('email')??'');
-  _password = (prefs.getString('pass')??'');
+  _email = (prefs.getString('email') ?? '');
+  _password = (prefs.getString('pass') ?? '');
   print("Splash:Preference");
   print(_email);
   print(_password);
-  if (_isEmailValid(_email??"no email")) {
+  if (_isEmailValid(_email ?? "no email")) {
     //try to login if got email;
     _onLogin(_email, _password, ctx);
   } else {
     //login as unregistered user
     User user = new User(
-        name: "not register",
-        email: "user@noregister",
-        phone: "not register");
+        name: "not register", email: "user@noregister", phone: "not register");
     Navigator.push(
         ctx, MaterialPageRoute(builder: (context) => MainScreen(user: user)));
   }
@@ -119,10 +116,7 @@ void _onLogin(String email, String pass, BuildContext ctx) {
     print("SPLASH:loading");
     print(dres);
     if (dres[0] == "success") {
-      User user = new User(
-          name: dres[1],
-          email: dres[2],
-          phone: dres[3]);
+      User user = new User(name: dres[1], email: dres[2], phone: dres[3]);
       Navigator.push(
           ctx, MaterialPageRoute(builder: (context) => MainScreen(user: user)));
     } else {

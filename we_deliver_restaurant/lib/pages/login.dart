@@ -8,7 +8,7 @@ import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 import 'package:we_deliver_restaurant/pages/register.dart';
 
-String urlLogin = "http://itschizo.com/aidil_qayyum/srs2/php/user/login_user.php";
+String urlLogin = "https://itschizo.com/aidil_qayyum/srs2/php/login_user.php";
 final TextEditingController _emcontroller = TextEditingController();
 String _email = "";
 final TextEditingController _passcontroller = TextEditingController();
@@ -27,8 +27,9 @@ class MyApp extends StatelessWidget {
 
 class LoginPage extends StatefulWidget {
   @override
-    _LoginPageState createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
+
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
@@ -36,22 +37,23 @@ class _LoginPageState extends State<LoginPage> {
     print('Init: $_email');
     super.initState();
   }
-   @override
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-        brightness: Brightness.light,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: _onBackPressAppBar,
-        )),
+            brightness: Brightness.light,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+              ),
+              onPressed: _onBackPressAppBar,
+            )),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -96,7 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 20,
                               color: Colors.grey),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.yellow[300]))),
+                              borderSide:
+                                  BorderSide(color: Colors.yellow[300]))),
                     ),
                     SizedBox(height: 20.0),
                     TextField(
@@ -110,7 +113,8 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 20,
                               color: Colors.grey),
                           focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.yellow[300]))),
+                              borderSide:
+                                  BorderSide(color: Colors.yellow[300]))),
                       obscureText: true,
                     ),
                     SizedBox(height: 5.0),
@@ -131,36 +135,35 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 40.0),
                     MaterialButton(
-                    shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                    minWidth: 300,
-                    height: 50,
-                    child: Text('Login', 
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20)),
-                    color: Colors.yellow,
-                    splashColor: Colors.blueGrey,
-                    textColor: Colors.black,
-                    elevation: 7.0,
-                    onPressed: _onLogin,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      minWidth: 300,
+                      height: 50,
+                      child: Text('Login',
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20)),
+                      color: Colors.yellow,
+                      splashColor: Colors.blueGrey,
+                      textColor: Colors.black,
+                      elevation: 7.0,
+                      onPressed: _onLogin,
                     ),
                     SizedBox(height: 20.0),
                     Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: _isChecked,
-                        onChanged: (bool value) {
-                          _onChange(value);
-                        },
-                      ),
-                      Text('Remember Me', 
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 16))
-                    ],
-                  ),
+                      children: <Widget>[
+                        Checkbox(
+                          value: _isChecked,
+                          onChanged: (bool value) {
+                            _onChange(value);
+                          },
+                        ),
+                        Text('Remember Me',
+                            style: TextStyle(
+                                fontFamily: 'Montserrat', fontSize: 16))
+                      ],
+                    ),
                   ],
                 )),
             SizedBox(height: 15.0),
@@ -169,18 +172,16 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Text(
                   'New to We Deliver ?',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 16),
+                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 16),
                 ),
                 SizedBox(width: 5.0),
                 InkWell(
                   onTap: () {
                     Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RegisterScreen(),
-                              ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterScreen(),
+                        ));
                   },
                   child: Text(
                     'Register',
@@ -197,13 +198,14 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ));
   }
+
   Future<bool> _onBackPressAppBar() async {
     Navigator.pop(
         context,
         MaterialPageRoute(
           builder: (context) => MainScreen(
-            //user: widget.user,
-          ),
+              //user: widget.user,
+              ),
         ));
     return Future.value(false);
   }
@@ -229,11 +231,9 @@ class _LoginPageState extends State<LoginPage> {
         if (dres[0] == "success") {
           pr.hide();
           print(dres);
-         User user = new User(name:dres[1],email: dres[2],phone:dres[3]);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MainScreen(user: user)));
+          User user = new User(name: dres[1], email: dres[2], phone: dres[3]);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MainScreen(user: user)));
         } else {
           pr.hide();
         }
@@ -258,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
     _password = (prefs.getString('pass'));
     print(_email);
     print(_password);
-    if (_email !=null && _email.length > 1) {
+    if (_email != null && _email.length > 1) {
       _emcontroller.text = _email;
       _passcontroller.text = _password;
       setState(() {
@@ -308,10 +308,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
   bool _isEmailValid(String email) {
     return RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
   }
 }
-
-  
