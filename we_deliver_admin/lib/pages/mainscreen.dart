@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/dashboard.dart';
-import 'package:we_deliver_admin/pages/order.dart';
 import 'package:we_deliver_admin/pages/menu.dart';
+import 'package:we_deliver_admin/pages/order.dart';
+import 'package:we_deliver_admin/pages/menu2.dart';
 import 'package:we_deliver_admin/pages/home.dart';
 import 'package:we_deliver_admin/pages/profile.dart';
 
@@ -29,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     tabs = [
       Dashboard(admin: widget.admin),
-      Menu(admin: widget.admin),
+      Menu2(admin: widget.admin),
       Order(admin: widget.admin),
       Profile(admin: widget.admin),
     ];

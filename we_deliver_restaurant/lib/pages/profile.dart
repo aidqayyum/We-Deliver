@@ -19,7 +19,7 @@ import 'package:we_deliver_restaurant/pages/setting.dart';
 
 String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
 String urlupdate =
-    "https://itschizo.com/aidil_qayyum/srs2/php/update_profile.php";
+    "https://itschizo.com/aidil_qayyum/srs2/php/update_profile_user.php";
 int number = 0;
 
 class Profile extends StatefulWidget {
@@ -51,13 +51,20 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: Text('PROFILE',
             style: TextStyle(
-                color: Color(0xFF030303),
-                fontSize: 25,
+                color: Color(0xFFFFFFFF),
+                fontSize: 20,
                 fontFamily: 'Montserrat')),
         brightness: Brightness.light,
         elevation: 0,
-        backgroundColor: Colors.yellow,
-        centerTitle: true,
+        backgroundColor: Colors.yellowAccent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onPressed: _onBackPressAppBar,
+        ),
+        //centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -116,12 +123,12 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title: Text(
                             widget.user.name?.toUpperCase() ?? 'Not register',
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                         onTap: _changeName,
                       ),
                       Divider(
@@ -134,11 +141,11 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title: Text(widget.user.phone ?? 'Not register',
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                         onTap: _changePhone,
                       ),
                       Divider(
@@ -151,7 +158,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         title: Text(widget.user.email ?? 'Not register',
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                       ),
                       Divider(
                         height: 10.0,
@@ -163,11 +170,11 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title: Text(_currentAddress,
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                       ),
                       Divider(
                         height: 10.0,
@@ -179,11 +186,11 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title:
-                            Text("Password", style: TextStyle(fontSize: 20.0)),
+                            Text("Password", style: TextStyle(fontSize: 16.0)),
                         onTap: _changePassword,
                       ),
                       Divider(
@@ -192,11 +199,15 @@ class _ProfileState extends State<Profile> {
                       ),
                       ListTile(
                         leading: Icon(
-                          Icons.payment,
+                          Icons.payments,
                           color: Colors.yellow,
                         ),
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.grey,
+                        ),
                         title:
-                            Text("Payment", style: TextStyle(fontSize: 20.0)),
+                            Text("Payment", style: TextStyle(fontSize: 16.0)),
                         onTap: () {},
                       ),
                       Divider(
@@ -228,43 +239,34 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        MaterialButton(
+                        /*MaterialButton(
                             onPressed: _gotologinPage,
                             child: Text("Login",
-                                style: TextStyle(fontSize: 23.0))),
+                                style: TextStyle(fontSize: 16.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
-                          color: Colors.grey,
-                        ),
-                        MaterialButton(
-                            onPressed: _gotoRegisterPage,
-                            child: Text("Register",
-                                style: TextStyle(fontSize: 23.0))),
-                        // SizedBox(height: 10.0,),
-                        Divider(
-                          height: 20.0,
-                          color: Colors.grey,
-                        ),
+                          color: Colors.black,
+                        ),*/
                         MaterialButton(
                             onPressed: _gotologout,
                             child: Text(
                               "Logout",
-                              style: TextStyle(fontSize: 23.0),
+                              style: TextStyle(fontSize: 16.0),
                             )),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
-                          color: Colors.grey,
+                          color: Colors.black,
                         ),
                         MaterialButton(
                             onPressed: () {},
                             child: Text("Exit      ",
-                                style: TextStyle(fontSize: 23.0))),
+                                style: TextStyle(fontSize: 16.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
-                          color: Colors.grey,
+                          color: Colors.black,
                         ),
                       ],
                     ),
@@ -278,7 +280,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void _gotologinPage() {
+  /*void _gotologinPage() {
     // flutter defined function
     //print(widget.user.name);
     showDialog(
@@ -310,9 +312,20 @@ class _ProfileState extends State<Profile> {
         );
       },
     );
+  }*/
+
+  Future<bool> _onBackPressAppBar() async {
+    Navigator.pop(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(
+            user: widget.user,
+          ),
+        ));
+    return Future.value(false);
   }
 
-  void _gotoRegisterPage() {
+  /*void _gotoRegisterPage() {
     // flutter defined function
     //print(widget.user.name);
     showDialog(
@@ -344,7 +357,7 @@ class _ProfileState extends State<Profile> {
         );
       },
     );
-  }
+  }*/
 
   void _changeName() {
     TextEditingController nameController = TextEditingController();

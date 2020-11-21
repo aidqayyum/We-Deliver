@@ -10,16 +10,19 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/mainscreen.dart';
-import 'package:we_deliver_admin/pages/menu.dart';
+//import 'package:we_deliver_admin/pages/menu.dart';
+import 'package:we_deliver_admin/pages/menu2.dart';
 
 File _image;
+final picker = ImagePicker();
 String pathAsset = 'assets/images/add.png';
 String urlUpload = "https://itschizo.com/aidil_qayyum/srs2/php/upload_food.php";
 String urlgetadmin = "https://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
 
-TextEditingController _foodcontroller = TextEditingController();
+final TextEditingController _foodcontroller = TextEditingController();
 final TextEditingController _pricecontroller = TextEditingController();
 final TextEditingController _desccontroller = TextEditingController();
+final TextEditingController _catcontroller = TextEditingController();
 //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 //Position _currentPosition;
 //String _currentAddress = "Searching your current location...";
@@ -64,9 +67,9 @@ class _AddFoodState extends State<AddFood> {
     Navigator.pop(
         context,
         MaterialPageRoute(
-          builder: (context) => Menu(
-            admin: widget.admin,
-          ),
+          builder: (context) => Menu2(
+              //admin: widget.admin,
+              ),
         ));
     return Future.value(false);
   }
@@ -81,7 +84,6 @@ class AddNewMenu extends StatefulWidget {
 }
 
 class _AddNewMenuState extends State<AddNewMenu> {
-  final picker = ImagePicker();
   String defaultValue = 'Pickup';
   @override
   void initState() {
@@ -129,6 +131,15 @@ class _AddNewMenuState extends State<AddNewMenu> {
             icon: Icon(Icons.info_outline),
           ),
         ),
+        TextField(
+          controller: _catcontroller,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            labelText: "Category",
+            icon: Icon(Icons.category_outlined),
+          ),
+        ),
+        //DropdownButton(),
         SizedBox(height: 20.0),
         MaterialButton(
             shape: RoundedRectangleBorder(
@@ -147,13 +158,13 @@ class _AddNewMenuState extends State<AddNewMenu> {
     );
   }
 
-  Future _choose() async {
-    /*// ignore: deprecated_member_use
+  void _choose() async {
+    // ignore: deprecated_member_use
     //_image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {});
+    //setState(() {});
     // ignore: deprecated_member_use
     //_image = await ImagePicker.pickImage(source: ImageSource.gallery);*/
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
@@ -185,6 +196,11 @@ class _AddNewMenuState extends State<AddNewMenu> {
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
+    if (_catcontroller.text.isEmpty) {
+      Toast.show("Please enter food category", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
     pr.style(message: "Adding...");
@@ -196,7 +212,8 @@ class _AddNewMenuState extends State<AddNewMenu> {
       "email": widget.admin.email,
       "fname": _foodcontroller.text,
       "fprice": _pricecontroller.text,
-      "fdesc": _desccontroller.text
+      "fdesc": _desccontroller.text,
+      "fcategory": _catcontroller.text,
     }).then((res) {
       print(res.body);
       Toast.show(res.body, context,
@@ -206,6 +223,7 @@ class _AddNewMenuState extends State<AddNewMenu> {
         _foodcontroller.text = "";
         _pricecontroller.text = "";
         _desccontroller.text = "";
+        _catcontroller.text = "";
         pr.hide();
         print(widget.admin.email);
         _onLogin(widget.admin.email, context);
