@@ -73,10 +73,10 @@ class _MainScreenState extends State<MainScreen> {
       ),
       drawer: Drawer(
         child: ListView(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.fromLTRB(1.0, 23, 0.0, 1.0),
           children: <Widget>[
             new UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: Colors.yellowAccent),
                 currentAccountPicture: new CircleAvatar(
                     radius: 60.0,
                     backgroundColor: const Color(0xFF778899),
@@ -96,6 +96,12 @@ class _MainScreenState extends State<MainScreen> {
             ListTile(
                 leading: Icon(Icons.shopping_cart),
                 title: Text("Order"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                }),
+            ListTile(
+                leading: Icon(Icons.payments_rounded),
+                title: Text("Payment"),
                 onTap: () {
                   Navigator.of(context).pop();
                 }),
@@ -223,13 +229,6 @@ class _MainScreenState extends State<MainScreen> {
                                             fit: BoxFit.fill,
                                             image: NetworkImage(
                                               "https://itschizo.com/aidil_qayyum/srs2/images/${foodList[index]['fimage']}.jpg",
-
-                                              /*new CircularProgressIndicator(),
-                                      
-                                          new Icon(
-                                        Icons.broken_image,
-                                        size: screenWidth / 2,
-                                      ),*/
                                             )))),
                                 SizedBox(height: 8),
                                 Text(
