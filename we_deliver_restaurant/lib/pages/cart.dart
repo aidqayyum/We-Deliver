@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:we_deliver_restaurant/core/food.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
+import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 
 class Cart extends StatefulWidget {
   final User user;
+  final Food foods;
 
-  Cart({Key key, this.user});
+  Cart({Key key, this.user, this.foods});
 
   @override
   _CartState createState() => _CartState();
@@ -15,19 +18,19 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          brightness: Brightness.light,
-          elevation: 0,
-          backgroundColor: Colors.yellow,
-          centerTitle: true,
-          title: Text("Order Cart",
-              style: TextStyle(fontSize: 25.0, color: Colors.black)),
-          leading: IconButton(
+            brightness: Brightness.light,
+            elevation: 0,
+            backgroundColor: Colors.yellowAccent,
+            //centerTitle: true,
+            title: Text("Order Cart",
+                style: TextStyle(fontSize: 25.0, color: Colors.black)),
+            leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios,
                 color: Colors.black,
               ),
-              onPressed: () {}), //_onBackPressAppBar,)
-        ),
+              onPressed: _onBackPressAppBar,
+            )),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Center(
@@ -130,7 +133,7 @@ class _CartState extends State<Cart> {
             child: Container(
               height: 50.0,
               decoration: BoxDecoration(
-                  color: Colors.yellow,
+                  color: Colors.yellowAccent,
                   borderRadius: BorderRadius.circular(35.0)),
               child: Center(
                 child: Text(
@@ -147,5 +150,16 @@ class _CartState extends State<Cart> {
         ],
       ),
     );
+  }
+
+  Future<bool> _onBackPressAppBar() async {
+    Navigator.pop(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(
+            user: widget.user,
+          ),
+        ));
+    return Future.value(false);
   }
 }

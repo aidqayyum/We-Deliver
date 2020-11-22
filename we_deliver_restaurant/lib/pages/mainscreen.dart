@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:we_deliver_restaurant/core/food.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/cart.dart';
 import 'package:we_deliver_restaurant/pages/favourite.dart';
 import 'package:we_deliver_restaurant/pages/home.dart';
 import 'package:we_deliver_restaurant/pages/profile.dart';
+import 'package:we_deliver_restaurant/smallpages/detailpage.dart';
 
 String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
 int number = 0;
@@ -97,7 +99,12 @@ class _MainScreenState extends State<MainScreen> {
                 leading: Icon(Icons.shopping_cart),
                 title: Text("Order"),
                 onTap: () {
-                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Cart(
+                                user: widget.user,
+                              )));
                 }),
             ListTile(
                 leading: Icon(Icons.payments_rounded),
@@ -218,7 +225,7 @@ class _MainScreenState extends State<MainScreen> {
                         padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 20.0),
                         child: Card(
                           child: InkWell(
-                            onTap: () => () {}, //_loadRestaurantDetail(index),
+                            onTap: () => _loadMenuDetails(index),
                             child: Column(
                               children: [
                                 Container(
@@ -296,5 +303,21 @@ class _MainScreenState extends State<MainScreen> {
     }).catchError((err) {
       print(err);
     });
+  }
+
+  _loadMenuDetails(int index) {
+    print(foodList[index]['fname']);
+    Food foods = new Food(
+      fid: foodList[index]['fid'],
+      fname: foodList[index]['fname'],
+      fprice: foodList[index]['fprice'],
+      fdesc: foodList[index]['fdesc'],
+      fcat: foodList[index]['fcat'],
+      fimage: foodList[index]['fimage'],
+    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => DetailPage(food1: foods)));
   }
 }
