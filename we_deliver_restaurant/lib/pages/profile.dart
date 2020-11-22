@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'dart:math';
-import 'dart:convert';
+
 import 'package:http/http.dart' as http;
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:random_string/random_string.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/login.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';

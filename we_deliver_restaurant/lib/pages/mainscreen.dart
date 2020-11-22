@@ -66,10 +66,8 @@ class _MainScreenState extends State<MainScreen> {
           'Home',
           style: TextStyle(color: Color(0xFFFFC508)),
         ),
-        actions: [
+        actions: <Widget>[
           IconButton(icon: Icon(Icons.search_outlined), onPressed: () {}),
-          IconButton(
-              icon: Icon(Icons.shopping_cart_outlined), onPressed: () {}),
         ],
         iconTheme: IconThemeData(color: Colors.yellow[700]),
       ),
@@ -257,6 +255,12 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  Future<bool> _onCart() {
+    Navigator.of(context).pop();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (BuildContext context) => Cart()));
   }
 
   /*Future<String> makeRequest() async {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:we_deliver_restaurant/core/user.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/login.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 
-String _email, _password;
+//String _email, _password;
 String urlLogin =
     "https://itschizo.com/aidil_qayyum/srs2/php/user/login_user.php";
 

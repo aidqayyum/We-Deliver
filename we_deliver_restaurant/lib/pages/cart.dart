@@ -152,7 +152,7 @@ class _CartState extends State<Cart> {
     );
   }
 
-  Future<bool> _onBackPressAppBar() async {
+  void _onBackPressAppBar() async {
     Navigator.pop(
         context,
         MaterialPageRoute(
