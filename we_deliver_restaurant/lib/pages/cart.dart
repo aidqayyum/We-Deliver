@@ -23,7 +23,7 @@ class _CartState extends State<Cart> {
             backgroundColor: Colors.yellowAccent,
             //centerTitle: true,
             title: Text("Order Cart",
-                style: TextStyle(fontSize: 25.0, color: Colors.black)),
+                style: TextStyle(fontSize: 20.0, color: Colors.black)),
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios,
@@ -46,62 +46,12 @@ class _CartState extends State<Cart> {
     return Container(
       height: 210.0,
       padding: EdgeInsets.only(
+        top: 90,
         left: 30.0,
         right: 30.0,
       ),
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Subtotal",
-                style: TextStyle(
-                    color: Color(0xFF000000),
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(''),
-            ],
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Discount",
-                style: TextStyle(
-                    color: Color(0xFF000000),
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(''),
-            ],
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Tax",
-                style: TextStyle(
-                    color: Color(0xFF000000),
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(''),
-            ],
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
           Divider(
             height: 2.0,
             color: Colors.black,

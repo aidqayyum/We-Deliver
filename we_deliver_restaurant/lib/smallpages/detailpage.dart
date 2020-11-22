@@ -4,9 +4,9 @@ import 'package:we_deliver_restaurant/pages/cart.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 
 class DetailPage extends StatefulWidget {
-  final Food food1;
+  final Food food;
 
-  const DetailPage({Key key, this.food1}) : super(key: key);
+  const DetailPage({Key key, this.food}) : super(key: key);
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -21,7 +21,7 @@ class _DetailPageState extends State<DetailPage> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.food1.fname,
+        title: Text(widget.food.fname,
             style: TextStyle(
                 color: Color(0xFF000000),
                 fontSize: 22,
@@ -81,10 +81,10 @@ class _DetailPageState extends State<DetailPage> {
                     alignment: Alignment.center,
                     child: Hero(
                       tag:
-                          "https://itschizo.com/aidil_qayyum/srs2/images/${widget.food1.fimage}.jpg",
+                          "https://itschizo.com/aidil_qayyum/srs2/images/${widget.food.fimage}.jpg",
                       child: Image(
                         image: NetworkImage(
-                          "https://itschizo.com/aidil_qayyum/srs2/images/${widget.food1.fimage}.jpg",
+                          "https://itschizo.com/aidil_qayyum/srs2/images/${widget.food.fimage}.jpg",
                         ),
                       ),
                     )),
@@ -104,7 +104,7 @@ class _DetailPageState extends State<DetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    widget.food1.fname,
+                    widget.food.fname,
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
@@ -114,7 +114,7 @@ class _DetailPageState extends State<DetailPage> {
                   Row(
                     children: <Widget>[
                       Text(
-                        "RM " + widget.food1.fprice,
+                        "RM " + widget.food.fprice,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -138,7 +138,7 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       Text(
-                        widget.food1.fcat,
+                        widget.food.fcat,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -156,7 +156,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(widget.food1.fdesc),
+                  Text(widget.food.fdesc),
                   Expanded(child: SizedBox()),
                   Row(
                     children: [

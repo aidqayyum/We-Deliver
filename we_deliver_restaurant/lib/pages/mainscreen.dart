@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 //import 'package:progress_dialog/progress_dialog.dart';
 import 'package:we_deliver_restaurant/core/food.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
@@ -26,6 +27,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   //List<Widget> tabs;
+  List<Food> cart = [];
   List foodList;
   double screenHeight, screenWidth;
   String titlecenter = "Loading Menu...";
@@ -201,6 +203,32 @@ class _MainScreenState extends State<MainScreen> {
       ),*/
       body: Column(
         children: [
+          Container(
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                  color: Colors.yellow, offset: Offset(1, 1), blurRadius: 20)
+            ]),
+            child: Padding(
+              padding: EdgeInsets.all(4),
+              child: Image.asset("assets/images/drinks.png",
+                  width: 50, height: 40),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+              height: 40,
+              child: Column(
+                children: [
+                  Container(),
+                  SizedBox(height: 5),
+                  Text(
+                    "Drinks",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  )
+                ],
+              )),
           foodList == null
               ? Flexible(
                   child: Container(
@@ -316,6 +344,6 @@ class _MainScreenState extends State<MainScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => DetailPage(food1: foods)));
+            builder: (BuildContext context) => DetailPage(food: foods)));
   }
 }
