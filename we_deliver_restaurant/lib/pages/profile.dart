@@ -9,8 +9,6 @@ import 'package:toast/toast.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/login.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
-import 'package:we_deliver_restaurant/pages/register.dart';
-import 'package:we_deliver_restaurant/pages/setting.dart';
 
 String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
 String urlupdate =

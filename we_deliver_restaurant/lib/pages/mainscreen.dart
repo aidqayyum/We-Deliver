@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:progress_dialog/progress_dialog.dart';
+//import 'package:progress_dialog/progress_dialog.dart';
 import 'package:we_deliver_restaurant/core/food.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/cart.dart';
-import 'package:we_deliver_restaurant/pages/favourite.dart';
-import 'package:we_deliver_restaurant/pages/home.dart';
+//import 'package:we_deliver_restaurant/pages/favourite.dart';
+//import 'package:we_deliver_restaurant/pages/home.dart';
 import 'package:we_deliver_restaurant/pages/profile.dart';
 import 'package:we_deliver_restaurant/smallpages/detailpage.dart';
 
@@ -255,12 +255,6 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
-  }
-
-  Future<bool> _onCart() {
-    Navigator.of(context).pop();
-    Navigator.push(
-        context, MaterialPageRoute(builder: (BuildContext context) => Cart()));
   }
 
   /*Future<String> makeRequest() async {
