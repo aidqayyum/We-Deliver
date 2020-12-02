@@ -16,13 +16,9 @@ import 'package:we_deliver_admin/pages/menu2.dart';
 File _image;
 final picker = ImagePicker();
 String pathAsset = 'assets/images/add.png';
-String urlUpload = "https://itschizo.com/aidil_qayyum/srs2/php/upload_food.php";
+String urlUpload = "https://itschizo.com/aidil_qayyum/srs2/php/add_food.php";
 String urlgetadmin = "https://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
 
-final TextEditingController _foodcontroller = TextEditingController();
-final TextEditingController _pricecontroller = TextEditingController();
-final TextEditingController _desccontroller = TextEditingController();
-final TextEditingController _catcontroller = TextEditingController();
 //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 //Position _currentPosition;
 //String _currentAddress = "Searching your current location...";
@@ -37,6 +33,11 @@ class AddFood extends StatefulWidget {
 }
 
 class _AddFoodState extends State<AddFood> {
+  final TextEditingController _foodcontroller = TextEditingController();
+  final TextEditingController _pricecontroller = TextEditingController();
+  final TextEditingController _desccontroller = TextEditingController();
+  final TextEditingController _catcontroller = TextEditingController();
+  String _foodname = "";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,12 +54,76 @@ class _AddFoodState extends State<AddFood> {
               icon: Icon(Icons.arrow_back_ios, color: Colors.black),
               onPressed: _onBackPressAppBar),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-            child: AddNewMenu(widget.admin),
+        body: Container(
+            child: Padding(
+          padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                GestureDetector(
+                    onTap: _choose,
+                    child: Container(
+                      width: 220,
+                      height: 250,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image: _image == null
+                            ? AssetImage(pathAsset)
+                            : FileImage(_image),
+                        fit: BoxFit.fill,
+                      )),
+                    )),
+                SizedBox(height: 10.0),
+                Text('Click on image above to take picture'),
+                TextField(
+                    controller: _foodcontroller,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: "Food Name",
+                      icon: Icon(Icons.restaurant_menu),
+                    )),
+                TextField(
+                    controller: _pricecontroller,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: "Food Price",
+                      icon: Icon(Icons.attach_money),
+                    )),
+                TextField(
+                  controller: _desccontroller,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: "Food Description",
+                    icon: Icon(Icons.info_outline),
+                  ),
+                ),
+                TextField(
+                  controller: _catcontroller,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: "Category",
+                    icon: Icon(Icons.category_outlined),
+                  ),
+                ),
+                //DropdownButton(),
+                SizedBox(height: 20.0),
+                MaterialButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    minWidth: 400,
+                    height: 50,
+                    child: Text(
+                      "Add Food",
+                      style: new TextStyle(fontSize: 18.0, color: Colors.black),
+                    ),
+                    color: Colors.yellow,
+                    //textColor: Colors.black,
+                    elevation: 10,
+                    onPressed: _onAddMenu),
+              ],
+            ),
           ),
-        ),
+        )),
       ),
     );
   }
@@ -73,109 +138,26 @@ class _AddFoodState extends State<AddFood> {
         ));
     return Future.value(false);
   }
-}
-
-class AddNewMenu extends StatefulWidget {
-  final Admin admin;
-  AddNewMenu(this.admin);
-
-  @override
-  _AddNewMenuState createState() => _AddNewMenuState();
-}
-
-class _AddNewMenuState extends State<AddNewMenu> {
-  String defaultValue = 'Pickup';
-  @override
-  void initState() {
-    super.initState();
-    //_getCurrentLocation();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        GestureDetector(
-            onTap: _choose,
-            child: Container(
-              width: 220,
-              height: 250,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image:
-                    _image == null ? AssetImage(pathAsset) : FileImage(_image),
-                fit: BoxFit.fill,
-              )),
-            )),
-        SizedBox(height: 10.0),
-        Text('Click on image above to take picture'),
-        TextField(
-            controller: _foodcontroller,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: "Food Name",
-              icon: Icon(Icons.restaurant_menu),
-            )),
-        TextField(
-            controller: _pricecontroller,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: "Food Price",
-              icon: Icon(Icons.attach_money),
-            )),
-        TextField(
-          controller: _desccontroller,
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            labelText: "Food Description",
-            icon: Icon(Icons.info_outline),
-          ),
-        ),
-        TextField(
-          controller: _catcontroller,
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            labelText: "Category",
-            icon: Icon(Icons.category_outlined),
-          ),
-        ),
-        //DropdownButton(),
-        SizedBox(height: 20.0),
-        MaterialButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            minWidth: 400,
-            height: 50,
-            child: Text(
-              "Add Food",
-              style: new TextStyle(fontSize: 18.0, color: Colors.black),
-            ),
-            color: Colors.yellow,
-            //textColor: Colors.black,
-            elevation: 10,
-            onPressed: _onAddMenu),
-      ],
-    );
-  }
 
   void _choose() async {
     // ignore: deprecated_member_use
     //_image = await ImagePicker.pickImage(source: ImageSource.camera);
     //setState(() {});
     // ignore: deprecated_member_use
-    //_image = await ImagePicker.pickImage(source: ImageSource.gallery);*/
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    _image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    //final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      if (pickedFile != null) {
+      /*if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
         print('No Image');
-      }
+      }*/
     });
   }
 
   void _onAddMenu() {
+    print(_image.toString());
     if (_image == null) {
       Toast.show("Please take picture", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -214,6 +196,7 @@ class _AddNewMenuState extends State<AddNewMenu> {
       "fprice": _pricecontroller.text,
       "fdesc": _desccontroller.text,
       "fcategory": _catcontroller.text,
+      "fimage": _foodname,
     }).then((res) {
       print(res.body);
       Toast.show(res.body, context,

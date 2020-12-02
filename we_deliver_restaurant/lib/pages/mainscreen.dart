@@ -1,12 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
-//import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:we_deliver_restaurant/core/food.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
+import 'package:we_deliver_restaurant/main.dart';
 import 'package:we_deliver_restaurant/pages/cart.dart';
 //import 'package:we_deliver_restaurant/pages/favourite.dart';
 //import 'package:we_deliver_restaurant/pages/home.dart';
@@ -26,18 +29,21 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  GlobalKey<RefreshIndicatorState> refreshKey;
   //List<Widget> tabs;
-  List<Food> cart = [];
   List foodList;
   double screenHeight, screenWidth;
   String titlecenter = "Loading Menu...";
-
-  int currentTabIndex = 0;
+  String cartquantity = "0";
+  int quantity = 1;
+  String server = "https://itschizo.com/aidilqayyum/srs2";
 
   @override
   void initState() {
     super.initState();
     _loadRestaurant();
+    _loadCartQuantity();
+    refreshKey = GlobalKey<RefreshIndicatorState>();
     /*tabs = [
       Home(user: widget.user),
       Fav(user: widget.user),
@@ -47,13 +53,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   String $pagetitle = "We Deliver";
-
-  onTapped(int index) {
-    setState(() {
-      currentTabIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     //SystemChrome.setEnabledSystemUIOverlays([]);
@@ -89,12 +88,12 @@ class _MainScreenState extends State<MainScreen> {
                     style: TextStyle(fontSize: 16, color: Colors.black)),
                 accountEmail: Text(widget.user.email,
                     style: TextStyle(fontSize: 16, color: Colors.black))),
-            ListTile(
+            /*ListTile(
                 leading: Icon(Icons.restaurant_menu),
                 title: Text("Favourites"),
                 onTap: () {
                   Navigator.of(context).pop();
-                }),
+                }),*/
             ListTile(
                 leading: Icon(Icons.shopping_cart),
                 title: Text("Order"),
@@ -136,13 +135,6 @@ class _MainScreenState extends State<MainScreen> {
                       onTap: () {
                         Navigator.of(context).pop();
                       }),
-                  /*ListTile(
-                          leading: Icon(Icons.add_to_home_screen),
-                          title: Text('Login'),
-                          onTap: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => LoginPage()));
-                          }),*/
                   ListTile(
                       leading: Icon(Icons.help),
                       title: Text('Help and Feedback'),
@@ -167,40 +159,6 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      /*body: tabs[currentTabIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.yellow[700],
-        unselectedItemColor: Colors.grey[850],
-        onTap: onTapped,
-        currentIndex: currentTabIndex,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text("Home"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-            ),
-            title: Text("Favourite"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart,
-            ),
-            title: Text("Cart"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-            ),
-            title: Text("Profile"),
-          )
-        ],
-      ),*/
       body: Column(
         children: [
           Container(
@@ -245,7 +203,7 @@ class _MainScreenState extends State<MainScreen> {
                   crossAxisCount: 2,
                   //crossAxisSpacing: 0.5,
                   //mainAxisSpacing: 3.0,
-                  childAspectRatio: (screenWidth / screenHeight) / 0.8,
+                  childAspectRatio: (screenWidth / screenHeight) / 0.9,
                   children: List.generate(foodList.length, (index) {
                     return Padding(
                         padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 20.0),
@@ -270,10 +228,26 @@ class _MainScreenState extends State<MainScreen> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: 8),
+                                //SizedBox(height: 8),
                                 Text("RM " + foodList[index]['fprice']),
                                 //Text(foodList[index]['fdesc']),
                                 Text(foodList[index]['fcat']),
+                                Text("Quantity: " +
+                                    foodList[index]['fquantity']),
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                  minWidth: 100,
+                                  height: 30,
+                                  child: Text(
+                                    'Add to Cart',
+                                  ),
+                                  color: Colors.yellowAccent,
+                                  textColor: Colors.black,
+                                  elevation: 10,
+                                  onPressed: () => _addtocartdialog(index),
+                                ),
                               ],
                             ),
                           ),
@@ -281,6 +255,22 @@ class _MainScreenState extends State<MainScreen> {
                   }),
                 ))
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => Cart(user: widget.user)));
+          _loadRestaurant();
+          _loadCartQuantity();
+        },
+        child: Icon(
+          Icons.shopping_cart_outlined,
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.yellowAccent,
+        //label: Text(cartquantity),
       ),
     );
   }
@@ -310,20 +300,20 @@ class _MainScreenState extends State<MainScreen> {
     return null;
   }*/
   void _loadRestaurant() async {
-    http.post("https://itschizo.com/aidil_qayyum/srs2/php/load_food.php",
-        body: {
-          //"location": "Changlun",
-        }).then((res) {
-      print(res.body);
+    await http.post("https://itschizo.com/aidil_qayyum/srs2/php/load_food.php",
+        body: {}).then((res) {
       if (res.body == "nodata") {
-        foodList = null;
+        cartquantity = "0";
+        titlecenter = "No product found";
         setState(() {
           titlecenter = "No Menu Found";
+          foodList = null;
         });
       } else {
         setState(() {
           var jsondata = json.decode(res.body);
           foodList = jsondata["wedeliver"];
+          cartquantity = widget.user.quantity;
         });
       }
     }).catchError((err) {
@@ -339,11 +329,187 @@ class _MainScreenState extends State<MainScreen> {
       fprice: foodList[index]['fprice'],
       fdesc: foodList[index]['fdesc'],
       fcat: foodList[index]['fcat'],
+      fquantity: foodList[index]['fquantity'],
       fimage: foodList[index]['fimage'],
     );
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (BuildContext context) => DetailPage(food: foods)));
+  }
+
+  _addtocartdialog(int index) {
+    quantity = 1;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, newSetState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              title: new Text(
+                "Add " + foodList[index]['fname'] + " to Cart?",
+                style: TextStyle(
+                  color: Colors.yellowAccent,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    "Select quantity of product",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FlatButton(
+                            onPressed: () => {
+                              newSetState(() {
+                                if (quantity > 1) {
+                                  quantity--;
+                                }
+                              })
+                            },
+                            child: Icon(
+                              MdiIcons.minus,
+                              color: Colors.yellowAccent,
+                            ),
+                          ),
+                          Text(
+                            quantity.toString(),
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          FlatButton(
+                            onPressed: () => {
+                              newSetState(() {
+                                if (quantity <
+                                    (int.parse(foodList[index]['fquantity']) -
+                                        2)) {
+                                  quantity++;
+                                } else {
+                                  Toast.show("Quantity not available", context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                }
+                              })
+                            },
+                            child: Icon(
+                              MdiIcons.plus,
+                              color: Colors.yellowAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                      _addtoCart(index);
+                    },
+                    child: Text(
+                      "Yes",
+                      style: TextStyle(
+                        color: Colors.yellowAccent,
+                      ),
+                    )),
+                MaterialButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: Colors.yellowAccent,
+                      ),
+                    )),
+              ],
+            );
+          });
+        });
+  }
+
+  void _addtoCart(int index) {
+    try {
+      int cquantity = int.parse(foodList[index]["fquantity"]);
+      print(cquantity);
+      print(foodList[index]["fid"]);
+      print(widget.user.email);
+      if (cquantity > 0) {
+        ProgressDialog pr = new ProgressDialog(context,
+            type: ProgressDialogType.Normal, isDismissible: true);
+        pr.style(message: "Add to cart...");
+        pr.show();
+        String urlLoadJobs = server + "/php/add_cart.php";
+        http.post(urlLoadJobs, body: {
+          "email": widget.user.email,
+          "proid": foodList[index]["fid"],
+          "cquantity": quantity.toString(),
+        }).then((res) {
+          print(res.body);
+          if (res.body == "failed") {
+            Toast.show("Failed add to cart", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            pr.hide();
+            return;
+          } else {
+            List respond = res.body.split(",");
+            setState(() {
+              cartquantity = respond[1];
+              widget.user.quantity = cartquantity;
+            });
+            Toast.show("Success add to cart", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          }
+          pr.hide();
+        }).catchError((err) {
+          print(err);
+          pr.hide();
+        });
+        pr.hide();
+      } else {
+        Toast.show("Out of stock", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    } catch (e) {
+      Toast.show("Failed add to cart", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
+  }
+
+  void _loadCartQuantity() async {
+    String urlLoadJobs = server + "/php/cart_quantity.php";
+    await http.post(urlLoadJobs, body: {
+      "email": widget.user.email,
+    }).then((res) {
+      if (res.body == "nodata") {
+      } else {
+        widget.user.quantity = res.body;
+      }
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  gotoCart() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => Cart(
+                  user: widget.user,
+                )));
+    _loadRestaurant();
+    _loadCartQuantity();
   }
 }

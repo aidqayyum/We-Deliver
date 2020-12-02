@@ -231,7 +231,8 @@ class _LoginPageState extends State<LoginPage> {
         if (dres[0] == "success") {
           pr.hide();
           print(dres);
-          User user = new User(name: dres[1], email: dres[2], phone: dres[3]);
+          User user = new User(
+              name: dres[1], email: dres[2], phone: dres[3], quantity: dres[4]);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MainScreen(user: user)));
         } else {

@@ -1,5 +1,5 @@
 class Food {
-  String fid, fname, fprice, fdesc, fcat, fimage;
+  String fid, fname, fprice, fdesc, fcat, fquantity, fimage;
 
   Food({
     this.fid,
@@ -7,6 +7,7 @@ class Food {
     this.fprice,
     this.fdesc,
     this.fcat,
+    this.fquantity,
     this.fimage,
   });
 }

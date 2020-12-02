@@ -134,7 +134,7 @@ class _MenuState extends State<Menu> {
         fname: menuList[index]['fname'],
         fprice: menuList[index]['fprice'],
         fdesc: menuList[index]['fdesc'],
-        fcat: menuList[index]['fcat'],
+        fcategory: menuList[index]['fcategory'],
         fimage: menuList[index]['fimage']);
 
     Navigator.push(

@@ -57,7 +57,6 @@ class _DetailPageState extends State<DetailPage> {
                     fit: BoxFit.fill,
                     image: NetworkImage(
                       "https://itschizo.com/aidil_qayyum/srs2/images/${widget.food1.fimage}.jpg",
-
                       //placeholder: (context, url) => new CircularProgressIndicator(),
                       //errorWidget: (context, url, error) => new Icon(
                       //Icons.broken_image,
@@ -116,13 +115,13 @@ class _DetailPageState extends State<DetailPage> {
                       Text(
                         "RM " + widget.food.fprice,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.yellow[700],
                         ),
                       ),
                       SizedBox(width: 30),
-                      _foodCounter(),
+                      //_foodCounter(),
                     ],
                   ),
                   SizedBox(height: 16),
@@ -132,7 +131,7 @@ class _DetailPageState extends State<DetailPage> {
                       Text(
                         "Category: ",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -140,18 +139,34 @@ class _DetailPageState extends State<DetailPage> {
                       Text(
                         widget.food.fcat,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.yellow[700],
                         ),
                       ),
+                      /*Text(
+                        "Quantity: ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        widget.food.fdesc,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.yellow[700],
+                        ),
+                      ),*/
                     ],
                   ),
                   SizedBox(height: 16),
                   Text(
                     "Description",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
