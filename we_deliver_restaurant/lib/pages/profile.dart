@@ -5,14 +5,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-//import 'package:image_picker/image_picker.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/login.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 
-String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
-String urlupdate =
-    "https://itschizo.com/aidil_qayyum/srs2/php/update_profile_user.php";
+String urlgetuser = "https://itschizo.com/wedeliver/php/get_user.php";
 int number = 0;
 
 class Profile extends StatefulWidget {
@@ -44,7 +41,7 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: Text('PROFILE',
             style: TextStyle(
-                color: Color(0xFFFFFFFF),
+                color: Color(0xFF000000),
                 fontSize: 20,
                 fontFamily: 'Montserrat')),
         brightness: Brightness.light,
@@ -89,7 +86,7 @@ class _ProfileState extends State<Profile> {
                       image: new DecorationImage(
                         fit: BoxFit.cover,
                         image: new NetworkImage(
-                            "https://itschizo.com/aidil_qayyum/srs2/profile/${widget.user.email}.jpg?dummy=${(number)}'"),
+                            "https://itschizo.com/wedeliver/profile/${widget.user.email}.jpg?dummy=${(number)}'"),
                       ),
                     ),
                   ),
@@ -240,14 +237,14 @@ class _ProfileState extends State<Profile> {
                         Divider(
                           height: 20.0,
                           color: Colors.black,
-                        ),*/
+                        ),
                         MaterialButton(
                             onPressed: _gotologout,
                             child: Text(
                               "Logout",
                               style: TextStyle(fontSize: 16.0),
                             )),
-                        // SizedBox(height: 10.0,),
+                        // SizedBox(height: 10.0,),*/
                         Divider(
                           height: 20.0,
                           color: Colors.black,
@@ -385,10 +382,12 @@ class _ProfileState extends State<Profile> {
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   return;
                 }
-                http.post(urlupdate, body: {
-                  "email": widget.user.email,
-                  "name": nameController.text,
-                }).then((res) {
+                http.post(
+                    "https://itschizo.com/wedeliver/php/update_profile_user.php",
+                    body: {
+                      "email": widget.user.email,
+                      "name": nameController.text,
+                    }).then((res) {
                   var string = res.body;
                   List dres = string.split(",");
                   if (dres[0] == "success") {
@@ -453,10 +452,12 @@ class _ProfileState extends State<Profile> {
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   return;
                 }
-                http.post(urlupdate, body: {
-                  "email": widget.user.email,
-                  "password": passController.text,
-                }).then((res) {
+                http.post(
+                    "https://itschizo.com/wedeliver/php/update_profile_user.php",
+                    body: {
+                      "email": widget.user.email,
+                      "password": passController.text,
+                    }).then((res) {
                   var string = res.body;
                   List dres = string.split(",");
                   if (dres[0] == "success") {
@@ -520,10 +521,12 @@ class _ProfileState extends State<Profile> {
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   return;
                 }
-                http.post(urlupdate, body: {
-                  "email": widget.user.email,
-                  "phone": phoneController.text,
-                }).then((res) {
+                http.post(
+                    "https://itschizo.com/wedeliver/php/update_profile_user.php",
+                    body: {
+                      "email": widget.user.email,
+                      "phone": phoneController.text,
+                    }).then((res) {
                   var string = res.body;
                   List dres = string.split(",");
                   if (dres[0] == "success") {
@@ -587,41 +590,5 @@ class _ProfileState extends State<Profile> {
     print('Inside savepref');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('pass', pass);
-  }
-
-  void _gotologout() async {
-    // flutter defined function
-    print(widget.user.name);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("You want to log out " + widget.user.name),
-          content: new Text("Are your sure?"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Yes"),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setString('email', '');
-                await prefs.setString('pass', '');
-                print("LOGOUT");
-                Navigator.pop(
-                    context, MaterialPageRoute(builder: (context) => MyApp()));
-              },
-            ),
-            new FlatButton(
-              child: new Text("No"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

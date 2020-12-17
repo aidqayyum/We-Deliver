@@ -8,7 +8,7 @@ import 'package:we_deliver_restaurant/core/user.dart';
 import 'package:we_deliver_restaurant/pages/mainscreen.dart';
 import 'package:we_deliver_restaurant/pages/register.dart';
 
-String urlLogin = "https://itschizo.com/aidil_qayyum/srs2/php/login_user.php";
+String urlLogin = "https://itschizo.com/wedeliver/php/login_user.php";
 final TextEditingController _emcontroller = TextEditingController();
 String _email = "";
 final TextEditingController _passcontroller = TextEditingController();
@@ -231,8 +231,7 @@ class _LoginPageState extends State<LoginPage> {
         if (dres[0] == "success") {
           pr.hide();
           print(dres);
-          User user = new User(
-              name: dres[1], email: dres[2], phone: dres[3], quantity: dres[4]);
+          User user = new User(name: dres[1], email: dres[2], phone: dres[3]);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MainScreen(user: user)));
         } else {

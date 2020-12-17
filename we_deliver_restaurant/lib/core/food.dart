@@ -1,13 +1,12 @@
 class Food {
-  String fid, fname, fprice, fdesc, fcat, fquantity, fimage;
+  String foodid, foodname, foodqty, foodprice, foodimg, fooddesc, foodcurqty;
 
-  Food({
-    this.fid,
-    this.fname,
-    this.fprice,
-    this.fdesc,
-    this.fcat,
-    this.fquantity,
-    this.fimage,
-  });
+  Food(
+      {this.foodid,
+      this.foodname,
+      this.foodqty,
+      this.foodprice,
+      this.foodimg,
+      this.fooddesc,
+      this.foodcurqty});
 }

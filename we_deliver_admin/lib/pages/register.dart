@@ -62,7 +62,7 @@ class _RegisterUserState extends State<RegisterScreen> {
     Navigator.pop(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreen(
+          builder: (context) => LoginPage(
               //admin: widget.admin,
               ),
         ));

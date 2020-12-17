@@ -11,8 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_deliver_restaurant/pages/login.dart';
 
 String pathAsset = 'assets/images/profile.jpg';
-String urlUpload =
-    "https://itschizo.com/aidil_qayyum/srs2/php/register_user.php";
+String urlUpload = "https://itschizo.com/wedeliver/php/register_user.php";
 File _image;
 final TextEditingController _namecontroller = TextEditingController();
 final TextEditingController _emcontroller = TextEditingController();
@@ -189,6 +188,24 @@ class RegisterWidgetState extends State<RegisterWidget> {
                 elevation: 7.0,
                 onPressed: _onRegister,
               ),
+              SizedBox(height: 40.0),
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                minWidth: 300,
+                height: 50,
+                child: Text('Login',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    )),
+                color: Colors.yellow,
+                splashColor: Colors.blueGrey,
+                textColor: Colors.black,
+                elevation: 7.0,
+                onPressed: _onLogin,
+              ),
               /*Container(
                       height: 40.0,
                       child: Material(
@@ -213,6 +230,11 @@ class RegisterWidgetState extends State<RegisterWidget> {
           )),
       SizedBox(height: 20.0),
     ]);
+  }
+
+  void _onLogin() {
+    Navigator.pop(context,
+        MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
   }
 
   void _choose() async {

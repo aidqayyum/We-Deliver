@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
-import 'package:we_deliver_restaurant/pages/profile.dart';
 
 class Setting extends StatefulWidget {
   final User user;

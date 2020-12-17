@@ -2,21 +2,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:toast/toast.dart';
-import 'package:flutter_search_bar/flutter_search_bar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:we_deliver_restaurant/core/food.dart';
 import 'package:we_deliver_restaurant/core/user.dart';
-import 'package:we_deliver_restaurant/main.dart';
-import 'package:we_deliver_restaurant/pages/cart.dart';
-//import 'package:we_deliver_restaurant/pages/favourite.dart';
-//import 'package:we_deliver_restaurant/pages/home.dart';
-import 'package:we_deliver_restaurant/pages/profile.dart';
-import 'package:we_deliver_restaurant/smallpages/detailpage.dart';
+import 'package:we_deliver_restaurant/pages/foodscreen.dart';
 
-String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_user.php";
+import 'package:we_deliver_restaurant/pages/profile.dart';
+import 'package:we_deliver_restaurant/pages/shoppingcartscreen.dart';
+
+String urlgetuser = "https://itschizo.com/wedeliver/php/get_user.php";
 int number = 0;
 
 class MainScreen extends StatefulWidget {
@@ -30,47 +24,42 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   GlobalKey<RefreshIndicatorState> refreshKey;
-  //List<Widget> tabs;
   List foodList;
   double screenHeight, screenWidth;
-  String titlecenter = "Loading Menu...";
-  String cartquantity = "0";
-  int quantity = 1;
-  String server = "https://itschizo.com/aidilqayyum/srs2";
+  String titlecenter = "Loading Food...";
+  String type = "Food";
 
   @override
   void initState() {
     super.initState();
-    _loadRestaurant();
-    _loadCartQuantity();
+    _loadFoods(type);
     refreshKey = GlobalKey<RefreshIndicatorState>();
-    /*tabs = [
-      Home(user: widget.user),
-      Fav(user: widget.user),
-      Cart(user: widget.user),
-      Profile(user: widget.user),
-    ];*/
   }
 
-  String $pagetitle = "We Deliver";
   @override
   Widget build(BuildContext context) {
-    //SystemChrome.setEnabledSystemUIOverlays([]);
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.yellow,
         brightness: Brightness.light,
         elevation: 0,
         title: Text(
           'Home',
-          style: TextStyle(color: Color(0xFFFFC508)),
+          style: TextStyle(color: Color(0xFF000000)),
         ),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.search_outlined), onPressed: () {}),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              _shoppingCartScreen();
+            },
+          )
         ],
-        iconTheme: IconThemeData(color: Colors.yellow[700]),
       ),
       drawer: Drawer(
         child: ListView(
@@ -82,18 +71,12 @@ class _MainScreenState extends State<MainScreen> {
                     radius: 60.0,
                     backgroundColor: const Color(0xFF778899),
                     backgroundImage: NetworkImage(
-                        "https://itschizo.com/aidil_qayyum/srs2/profile/${widget.user.email}.jpg?dummy=${(number)}'")),
+                        "https://itschizo.com/wedeliver/profile/${widget.user.email}.jpg?dummy=${(number)}'")),
                 accountName: Text(
                     widget.user.name?.toUpperCase() ?? 'Not register',
                     style: TextStyle(fontSize: 16, color: Colors.black)),
                 accountEmail: Text(widget.user.email,
                     style: TextStyle(fontSize: 16, color: Colors.black))),
-            /*ListTile(
-                leading: Icon(Icons.restaurant_menu),
-                title: Text("Favourites"),
-                onTap: () {
-                  Navigator.of(context).pop();
-                }),*/
             ListTile(
                 leading: Icon(Icons.shopping_cart),
                 title: Text("Order"),
@@ -101,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Cart(
+                          builder: (context) => ShoppingCartScreen(
                                 user: widget.user,
                               )));
                 }),
@@ -161,32 +144,32 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                  color: Colors.yellow, offset: Offset(1, 1), blurRadius: 20)
-            ]),
-            child: Padding(
-              padding: EdgeInsets.all(4),
-              child: Image.asset("assets/images/drinks.png",
-                  width: 50, height: 40),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.food_bank),
+                iconSize: 32,
+                onPressed: () {
+                  setState(() {
+                    type = "Food";
+                    _loadFoods(type);
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.emoji_food_beverage),
+                iconSize: 32,
+                onPressed: () {
+                  setState(() {
+                    type = "Beverage";
+                    _loadFoods(type);
+                  });
+                },
+              ),
+            ],
           ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-              height: 40,
-              child: Column(
-                children: [
-                  Container(),
-                  SizedBox(height: 5),
-                  Text(
-                    "Drinks",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  )
-                ],
-              )),
+          Container(),
           foodList == null
               ? Flexible(
                   child: Container(
@@ -201,53 +184,41 @@ class _MainScreenState extends State<MainScreen> {
               : Flexible(
                   child: GridView.count(
                   crossAxisCount: 2,
-                  //crossAxisSpacing: 0.5,
-                  //mainAxisSpacing: 3.0,
-                  childAspectRatio: (screenWidth / screenHeight) / 0.9,
+                  childAspectRatio: (screenWidth / screenHeight) / 0.7,
                   children: List.generate(foodList.length, (index) {
                     return Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 20.0),
+                        padding: EdgeInsets.all(8),
                         child: Card(
                           child: InkWell(
-                            onTap: () => _loadMenuDetails(index),
+                            onTap: () => _loadFoodDetails(index),
                             child: Column(
                               children: [
                                 Container(
-                                    height: screenHeight / 4.3,
+                                    height: screenHeight / 4.5,
                                     width: screenWidth / 1.2,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: NetworkImage(
-                                              "https://itschizo.com/aidil_qayyum/srs2/images/${foodList[index]['fimage']}.jpg",
-                                            )))),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://itschizo.com/wedeliver/foodimages/${foodList[index]['imgname']}.jpg",
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          new CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          new Icon(
+                                        Icons.broken_image,
+                                        size: screenWidth / 2,
+                                      ),
+                                    )),
                                 SizedBox(height: 8),
                                 Text(
-                                  foodList[index]['fname'],
+                                  foodList[index]['foodname'],
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 //SizedBox(height: 8),
-                                Text("RM " + foodList[index]['fprice']),
+                                Text("RM " + foodList[index]['foodprice']),
                                 //Text(foodList[index]['fdesc']),
-                                Text(foodList[index]['fcat']),
-                                Text("Quantity: " +
-                                    foodList[index]['fquantity']),
-                                MaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(20.0)),
-                                  minWidth: 100,
-                                  height: 30,
-                                  child: Text(
-                                    'Add to Cart',
-                                  ),
-                                  color: Colors.yellowAccent,
-                                  textColor: Colors.black,
-                                  elevation: 10,
-                                  onPressed: () => _addtocartdialog(index),
-                                ),
+                                Text("Quantity: " + foodList[index]['foodqty']),
                               ],
                             ),
                           ),
@@ -256,64 +227,31 @@ class _MainScreenState extends State<MainScreen> {
                 ))
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => Cart(user: widget.user)));
-          _loadRestaurant();
-          _loadCartQuantity();
-        },
-        child: Icon(
-          Icons.shopping_cart_outlined,
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.yellowAccent,
-        //label: Text(cartquantity),
-      ),
     );
   }
 
-  /*Future<String> makeRequest() async {
-    String urlLoadFood =
-        "https://itschizo.com/aidil_qayyum/srs2/php/load_food.php";
-    ProgressDialog pr = new ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    pr.style(message: "Loading All Posted Menu");
-    pr.show();
-    http.post(urlLoadFood, body: {
-      "email": widget.user.email ?? "notavail",
+  void _shoppingCartScreen() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                ShoppingCartScreen(user: widget.user)));
+  }
+
+  void _loadFoods(String ftype) {
+    http.post("https://itschizo.com/wedeliver/php/load_foods.php", body: {
+      "type": ftype,
     }).then((res) {
-      setState(() {
-        var extractdata = json.decode(res.body);
-        foodList = extractdata["wedeliver"];
-        //perpage = (foodList.length / 10);
-        print("data");
-        print(foodList);
-        pr.hide();
-      });
-    }).catchError((err) {
-      print(err);
-      pr.hide();
-    });
-    return null;
-  }*/
-  void _loadRestaurant() async {
-    await http.post("https://itschizo.com/aidil_qayyum/srs2/php/load_food.php",
-        body: {}).then((res) {
+      print(res.body);
       if (res.body == "nodata") {
-        cartquantity = "0";
-        titlecenter = "No product found";
+        foodList = null;
         setState(() {
-          titlecenter = "No Menu Found";
-          foodList = null;
+          titlecenter = "No $type Available";
         });
       } else {
         setState(() {
           var jsondata = json.decode(res.body);
-          foodList = jsondata["wedeliver"];
-          cartquantity = widget.user.quantity;
+          foodList = jsondata["foods"];
         });
       }
     }).catchError((err) {
@@ -321,195 +259,22 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  _loadMenuDetails(int index) {
-    print(foodList[index]['fname']);
-    Food foods = new Food(
-      fid: foodList[index]['fid'],
-      fname: foodList[index]['fname'],
-      fprice: foodList[index]['fprice'],
-      fdesc: foodList[index]['fdesc'],
-      fcat: foodList[index]['fcat'],
-      fquantity: foodList[index]['fquantity'],
-      fimage: foodList[index]['fimage'],
-    );
+  _loadFoodDetails(int index) {
+    Food curfood = new Food(
+        foodid: foodList[index]['foodid'],
+        foodname: foodList[index]['foodname'],
+        foodprice: foodList[index]['foodprice'],
+        foodqty: foodList[index]['foodqty'],
+        foodimg: foodList[index]['imgname'],
+        fooddesc: foodList[index]['fooddesc'],
+        foodcurqty: "1");
+
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => DetailPage(food: foods)));
-  }
-
-  _addtocartdialog(int index) {
-    quantity = 1;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, newSetState) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
-              title: new Text(
-                "Add " + foodList[index]['fname'] + " to Cart?",
-                style: TextStyle(
-                  color: Colors.yellowAccent,
-                ),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    "Select quantity of product",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          FlatButton(
-                            onPressed: () => {
-                              newSetState(() {
-                                if (quantity > 1) {
-                                  quantity--;
-                                }
-                              })
-                            },
-                            child: Icon(
-                              MdiIcons.minus,
-                              color: Colors.yellowAccent,
-                            ),
-                          ),
-                          Text(
-                            quantity.toString(),
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          FlatButton(
-                            onPressed: () => {
-                              newSetState(() {
-                                if (quantity <
-                                    (int.parse(foodList[index]['fquantity']) -
-                                        2)) {
-                                  quantity++;
-                                } else {
-                                  Toast.show("Quantity not available", context,
-                                      duration: Toast.LENGTH_LONG,
-                                      gravity: Toast.BOTTOM);
-                                }
-                              })
-                            },
-                            child: Icon(
-                              MdiIcons.plus,
-                              color: Colors.yellowAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                      _addtoCart(index);
-                    },
-                    child: Text(
-                      "Yes",
-                      style: TextStyle(
-                        color: Colors.yellowAccent,
-                      ),
-                    )),
-                MaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                        color: Colors.yellowAccent,
-                      ),
-                    )),
-              ],
-            );
-          });
-        });
-  }
-
-  void _addtoCart(int index) {
-    try {
-      int cquantity = int.parse(foodList[index]["fquantity"]);
-      print(cquantity);
-      print(foodList[index]["fid"]);
-      print(widget.user.email);
-      if (cquantity > 0) {
-        ProgressDialog pr = new ProgressDialog(context,
-            type: ProgressDialogType.Normal, isDismissible: true);
-        pr.style(message: "Add to cart...");
-        pr.show();
-        String urlLoadJobs = server + "/php/add_cart.php";
-        http.post(urlLoadJobs, body: {
-          "email": widget.user.email,
-          "proid": foodList[index]["fid"],
-          "cquantity": quantity.toString(),
-        }).then((res) {
-          print(res.body);
-          if (res.body == "failed") {
-            Toast.show("Failed add to cart", context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-            pr.hide();
-            return;
-          } else {
-            List respond = res.body.split(",");
-            setState(() {
-              cartquantity = respond[1];
-              widget.user.quantity = cartquantity;
-            });
-            Toast.show("Success add to cart", context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-          }
-          pr.hide();
-        }).catchError((err) {
-          print(err);
-          pr.hide();
-        });
-        pr.hide();
-      } else {
-        Toast.show("Out of stock", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      }
-    } catch (e) {
-      Toast.show("Failed add to cart", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    }
-  }
-
-  void _loadCartQuantity() async {
-    String urlLoadJobs = server + "/php/cart_quantity.php";
-    await http.post(urlLoadJobs, body: {
-      "email": widget.user.email,
-    }).then((res) {
-      if (res.body == "nodata") {
-      } else {
-        widget.user.quantity = res.body;
-      }
-    }).catchError((err) {
-      print(err);
-    });
-  }
-
-  gotoCart() async {
-    await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => Cart(
+            builder: (BuildContext context) => FoodScreenDetails(
+                  food: curfood,
                   user: widget.user,
                 )));
-    _loadRestaurant();
-    _loadCartQuantity();
   }
 }
