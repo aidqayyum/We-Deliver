@@ -8,7 +8,7 @@ import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/mainscreen.dart';
 import 'package:we_deliver_admin/pages/register.dart';
 
-String urlLogin = "https://itschizo.com/aidil_qayyum/srs2/php/login_admin.php";
+String urlLogin = "https://itschizo.com/wedeliver/php/login_admin.php";
 final TextEditingController _emcontroller = TextEditingController();
 String _email = "";
 final TextEditingController _passcontroller = TextEditingController();

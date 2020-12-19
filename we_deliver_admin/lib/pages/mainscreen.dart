@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/dashboard.dart';
 import 'package:we_deliver_admin/pages/menu.dart';
 import 'package:we_deliver_admin/pages/order.dart';
-import 'package:we_deliver_admin/pages/menu2.dart';
-import 'package:we_deliver_admin/pages/home.dart';
 import 'package:we_deliver_admin/pages/profile.dart';
 
-String urlgetuser = "https://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
+String urlgetuser = "https://itschizo.com/wedeliver/php/get_admin.php";
 int number = 0;
 
 class MainScreen extends StatefulWidget {
@@ -30,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     tabs = [
       Dashboard(admin: widget.admin),
-      Menu2(admin: widget.admin),
+      Menu(admin: widget.admin),
       Order(admin: widget.admin),
       Profile(admin: widget.admin),
     ];

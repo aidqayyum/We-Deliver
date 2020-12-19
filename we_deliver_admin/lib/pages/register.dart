@@ -9,11 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_deliver_admin/pages/login.dart';
-import 'package:we_deliver_admin/pages/mainscreen.dart';
 
 String pathAsset = 'assets/images/profile.jpg';
-String urlUpload =
-    "https://itschizo.com/aidil_qayyum/srs2/php/register_admin.php";
+String urlUpload = "https://itschizo.com/wedeliver/php/register_admin.php";
 File _image;
 final TextEditingController _namecontroller = TextEditingController();
 final TextEditingController _emcontroller = TextEditingController();

@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:we_deliver_admin/core/admin.dart';
 import 'package:we_deliver_admin/pages/login.dart';
-import 'package:we_deliver_admin/pages/mainscreen.dart';
 
-String _email, _password;
-String urlLogin =
-    "https://itschizo.com/aidil_qayyum/srs2/php/admin/login_admin.php";
+String urlLogin = "https://itschizo.com/wedeliver/php/login_admin.php";
 
 void main() => runApp(MyApp());
 
@@ -16,8 +10,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.yellow));
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return MaterialApp(
+      theme: new ThemeData(primarySwatch: Colors.yellow),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(

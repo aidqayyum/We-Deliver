@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'dart:math';
-import 'dart:convert';
-import 'package:flutter/material.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:random_string/random_string.dart';
 import 'package:we_deliver_admin/core/admin.dart';
-import 'package:we_deliver_admin/pages/login.dart';
-import 'package:we_deliver_admin/pages/order.dart';
-import 'package:we_deliver_admin/pages/mainscreen.dart';
-import 'package:we_deliver_admin/pages/register.dart';
-import 'package:we_deliver_admin/widgets/list.dart';
 
-String urlgetuser = "http://itschizo.com/aidil_qayyum/srs2/php/get_admin.php";
-String urlupdate =
-    "https://itschizo.com/aidil_qayyum/srs2/php/update_profile_admin.php";
+String urlgetadmin = "https://itschizo.com/wedeliver/php/get_admin.php";
 int number = 0;
 
 class Profile extends StatefulWidget {
@@ -36,6 +22,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   GlobalKey<RefreshIndicatorState> refreshKey;
 
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
   @override
   void initState() {
     super.initState();
@@ -46,12 +34,23 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('PROFILE',
+            style: TextStyle(
+                color: Color(0xFF000000),
+                fontSize: 20,
+                fontFamily: 'Montserrat')),
         brightness: Brightness.light,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
+        backgroundColor: Colors.yellowAccent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.yellowAccent,
+          ),
+          onPressed: () {},
+        ),
+        //centerTitle: true,
       ),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -82,7 +81,7 @@ class _ProfileState extends State<Profile> {
                       image: new DecorationImage(
                         fit: BoxFit.cover,
                         image: new NetworkImage(
-                            "https://itschizo.com/aidil_qayyum/srs2/profile/${widget.admin.email}.jpg?dummy=${(number)}'"),
+                            "https://itschizo.com/wedeliver/profile/${widget.admin.email}.jpg?dummy=${(number)}'"),
                       ),
                     ),
                   ),
@@ -109,12 +108,12 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title: Text(
                             widget.admin.name?.toUpperCase() ?? 'Not register',
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                         onTap: _changeName,
                       ),
                       Divider(
@@ -127,11 +126,11 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title: Text(widget.admin.phone ?? 'Not register',
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                         onTap: _changePhone,
                       ),
                       Divider(
@@ -144,7 +143,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         title: Text(widget.admin.email ?? 'Not register',
-                            style: TextStyle(fontSize: 20.0)),
+                            style: TextStyle(fontSize: 16.0)),
                       ),
                       Divider(
                         height: 10.0,
@@ -156,11 +155,11 @@ class _ProfileState extends State<Profile> {
                           color: Colors.yellow,
                         ),
                         trailing: Icon(
-                          Icons.arrow_right,
-                          color: Colors.black,
+                          Icons.mode_edit,
+                          color: Colors.grey,
                         ),
                         title:
-                            Text("Password", style: TextStyle(fontSize: 20.0)),
+                            Text("Password", style: TextStyle(fontSize: 16.0)),
                         onTap: _changePassword,
                       ),
                       Divider(
@@ -192,44 +191,30 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        MaterialButton(
+                        /*MaterialButton(
                             onPressed: _gotologinPage,
                             child: Text("Login",
-                                style: TextStyle(fontSize: 23.0))),
+                                style: TextStyle(fontSize: 16.0))),
                         // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
-                          color: Colors.grey,
-                        ),
+                          color: Colors.black,
+                        ),*/
                         MaterialButton(
-                            onPressed: _gotoRegisterPage,
-                            child: Text("Register",
-                                style: TextStyle(fontSize: 23.0))),
-                        // SizedBox(height: 10.0,),
-                        Divider(
-                          height: 20.0,
-                          color: Colors.grey,
-                        ),
-                        MaterialButton(
-                            onPressed: _gotologout,
+                            onPressed: () {},
                             child: Text(
                               "Logout",
-                              style: TextStyle(fontSize: 23.0),
+                              style: TextStyle(fontSize: 16.0),
                             )),
-                        // SizedBox(height: 10.0,),
                         Divider(
                           height: 20.0,
                           color: Colors.grey,
                         ),
+                        // SizedBox(height: 10.0,),
                         MaterialButton(
                             onPressed: () {},
                             child: Text("Exit      ",
-                                style: TextStyle(fontSize: 23.0))),
-                        // SizedBox(height: 10.0,),
-                        Divider(
-                          height: 20.0,
-                          color: Colors.grey,
-                        ),
+                                style: TextStyle(fontSize: 16.0))),
                       ],
                     ),
                   ),
@@ -242,41 +227,18 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void _gotologinPage() {
-    // flutter defined function
-    //print(widget.user.name);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Go to login page?"), //+ widget.user.name),
-          content: new Text("Are your sure?"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Yes"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()));
-              },
-            ),
-            new FlatButton(
-              child: new Text("No"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  /*Future<bool> _onBackPressAppBar() async {
+    Navigator.pop(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(
+            admin: widget.admin,
+          ),
+        ));
+    return Future.value(false);
+  }*/
 
-  void _gotoRegisterPage() {
+  /*void _gotoRegisterPage() {
     // flutter defined function
     //print(widget.user.name);
     showDialog(
@@ -308,7 +270,7 @@ class _ProfileState extends State<Profile> {
         );
       },
     );
-  }
+  }*/
 
   void _changeName() {
     TextEditingController nameController = TextEditingController();
@@ -343,10 +305,12 @@ class _ProfileState extends State<Profile> {
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   return;
                 }
-                http.post(urlupdate, body: {
-                  "email": widget.admin.email,
-                  "name": nameController.text,
-                }).then((res) {
+                http.post(
+                    "https://itschizo.com/wedeliver/php/update_profile_admin.php",
+                    body: {
+                      "email": widget.admin.email,
+                      "name": nameController.text,
+                    }).then((res) {
                   var string = res.body;
                   List dres = string.split(",");
                   if (dres[0] == "success") {
@@ -411,10 +375,12 @@ class _ProfileState extends State<Profile> {
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   return;
                 }
-                http.post(urlupdate, body: {
-                  "email": widget.admin.email,
-                  "password": passController.text,
-                }).then((res) {
+                http.post(
+                    "https://itschizo.com/wedeliver/php/update_profile_admin.php",
+                    body: {
+                      "email": widget.admin.email,
+                      "password": passController.text,
+                    }).then((res) {
                   var string = res.body;
                   List dres = string.split(",");
                   if (dres[0] == "success") {
@@ -478,10 +444,12 @@ class _ProfileState extends State<Profile> {
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   return;
                 }
-                http.post(urlupdate, body: {
-                  "email": widget.admin.email,
-                  "phone": phoneController.text,
-                }).then((res) {
+                http.post(
+                    "https://itschizo.com/wedeliver/php/update_profile_admin.php",
+                    body: {
+                      "email": widget.admin.email,
+                      "phone": phoneController.text,
+                    }).then((res) {
                   var string = res.body;
                   List dres = string.split(",");
                   if (dres[0] == "success") {
@@ -514,41 +482,5 @@ class _ProfileState extends State<Profile> {
     print('Inside savepref');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('pass', pass);
-  }
-
-  void _gotologout() async {
-    // flutter defined function
-    print(widget.admin.name);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("You want to log out " + widget.admin.name),
-          content: new Text("Are your sure?"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Yes"),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setString('email', '');
-                await prefs.setString('pass', '');
-                print("LOGOUT");
-                Navigator.pop(
-                    context, MaterialPageRoute(builder: (context) => MyApp()));
-              },
-            ),
-            new FlatButton(
-              child: new Text("No"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
