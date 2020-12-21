@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.yellow,
+        backgroundColor: Colors.yellowAccent,
         brightness: Brightness.light,
         elevation: 0,
         title: Text(
