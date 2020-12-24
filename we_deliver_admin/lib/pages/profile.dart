@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
@@ -111,8 +110,7 @@ class _ProfileState extends State<Profile> {
                           Icons.mode_edit,
                           color: Colors.grey,
                         ),
-                        title: Text(
-                            widget.admin.name?.toUpperCase() ?? 'Not register',
+                        title: Text(widget.admin.name?.toUpperCase(),
                             style: TextStyle(fontSize: 16.0)),
                         onTap: _changeName,
                       ),
@@ -161,6 +159,36 @@ class _ProfileState extends State<Profile> {
                         title:
                             Text("Password", style: TextStyle(fontSize: 16.0)),
                         onTap: _changePassword,
+                      ),
+                      Divider(
+                        height: 10.0,
+                        color: Colors.grey,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.map_rounded,
+                          color: Colors.yellow,
+                        ),
+                        title: Text(
+                            "Radius (KM)= " + widget.admin.radius + "km" ??
+                                'Not register',
+                            style: TextStyle(fontSize: 16.0)),
+                      ),
+                      Divider(
+                        height: 10.0,
+                        color: Colors.grey,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.delivery_dining,
+                          color: Colors.yellow,
+                        ),
+                        title: Text(
+                            "Delivery Charge (KM)= " +
+                                    "RM" +
+                                    widget.admin.delivery ??
+                                'Not register',
+                            style: TextStyle(fontSize: 16.0)),
                       ),
                       Divider(
                         height: 10.0,

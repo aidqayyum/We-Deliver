@@ -8,6 +8,7 @@ import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:we_deliver_admin/pages/login.dart';
 
 String pathAsset = 'assets/images/profile.jpg';
@@ -17,7 +18,13 @@ final TextEditingController _namecontroller = TextEditingController();
 final TextEditingController _emcontroller = TextEditingController();
 final TextEditingController _passcontroller = TextEditingController();
 final TextEditingController _phcontroller = TextEditingController();
+final TextEditingController _radcontroller = TextEditingController();
+final TextEditingController _delcontroller = TextEditingController();
+
+double screenHeight, screenWidth, latitude, longitude;
 String _name, _email, _password, _phone;
+String gmaploc = "";
+Position _currentPosition;
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -120,7 +127,7 @@ class RegisterWidgetState extends State<RegisterWidget> {
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Colors.grey),
                     // hintText: 'EMAIL',
                     // hintStyle: ,
@@ -137,7 +144,7 @@ class RegisterWidgetState extends State<RegisterWidget> {
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Colors.grey),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.yellow))),
@@ -151,7 +158,7 @@ class RegisterWidgetState extends State<RegisterWidget> {
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Colors.grey),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.yellow))),
@@ -167,11 +174,55 @@ class RegisterWidgetState extends State<RegisterWidget> {
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Colors.grey),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.yellow))),
               ),
+              SizedBox(height: 10.0),
+              TextField(
+                controller: _radcontroller,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'Radius (KM)',
+                    icon: Icon(Icons.map_rounded),
+                    labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.grey),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.yellow))),
+              ),
+              TextField(
+                controller: _delcontroller,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                    labelText: 'Delivery Charge Per KM',
+                    icon: Icon(Icons.delivery_dining),
+                    labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.grey),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.yellow))),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                  height: 30,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        child: Icon(Icons.location_on),
+                        onTap: _searchCurLoc,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(gmaploc),
+                    ],
+                  )),
               SizedBox(height: 40.0),
               MaterialButton(
                 shape: RoundedRectangleBorder(
@@ -190,6 +241,11 @@ class RegisterWidgetState extends State<RegisterWidget> {
                 elevation: 7.0,
                 onPressed: _onRegister,
               ),
+              SizedBox(height: 10),
+              GestureDetector(
+                  onTap: _onLogin,
+                  child:
+                      Text('Already register', style: TextStyle(fontSize: 16))),
               /*Container(
                       height: 40.0,
                       child: Material(
@@ -230,6 +286,12 @@ class RegisterWidgetState extends State<RegisterWidget> {
     });
   }
 
+  void _onLogin() {
+    // Navigator.pushReplacement(context,
+    //     MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+    Navigator.pop(context);
+  }
+
   void _onRegister() {
     print('onRegister Button from RegisterUser()');
     print(_image.toString());
@@ -258,11 +320,18 @@ class RegisterWidgetState extends State<RegisterWidget> {
         "email": _email,
         "password": _password,
         "phone": _phone,
+        "delivery": _delcontroller.text,
+        "radius": _radcontroller.text,
+        "latitude": _currentPosition.latitude.toString(),
+        "longitude": _currentPosition.longitude.toString(),
       }).then((res) {
-        print(res.statusCode);
+        print(res.body);
         if (res.body == "success") {
-          Toast.show(res.body, context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          Toast.show(
+              "Registration success. An email has been sent to .$_email. Please check your email for verification. Also check in your spam folder.",
+              context,
+              duration: Toast.LENGTH_LONG,
+              gravity: Toast.BOTTOM);
           _image = null;
           savepref(_email, _password);
           _namecontroller.text = '';
@@ -338,5 +407,33 @@ class RegisterWidgetState extends State<RegisterWidget> {
     await prefs.setString('pass', pass);
     print('Save pref $_email');
     print('Save pref $_password');
+  }
+
+  _searchCurLoc() {
+    _getLocation();
+  }
+
+  Future<void> _getLocation() async {
+    try {
+      final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+      geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+          .then((Position position) {
+        setState(() {
+          _currentPosition = position;
+          print("GEOLOCATOR");
+          if (_currentPosition != null) {
+            print(gmaploc);
+            gmaploc = _currentPosition.latitude.toString() +
+                "/" +
+                _currentPosition.longitude.toString();
+          }
+        });
+      }).catchError((e) {
+        print(e);
+      });
+    } catch (exception) {
+      print(exception.toString());
+    }
   }
 }

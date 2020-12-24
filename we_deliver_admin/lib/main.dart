@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:we_deliver_admin/pages/login.dart';
 
 String urlLogin = "https://itschizo.com/wedeliver/php/login_admin.php";
@@ -12,72 +14,70 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return MaterialApp(
-      theme: new ThemeData(primarySwatch: Colors.yellow),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'assets/images/srs3.png',
-                scale: 3,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              new ProgressIndicator(),
-            ],
-          ),
-        ),
+      //title: 'Material App',
+      theme: ThemeData(
+        primarySwatch: Colors.yellow,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      home: Loading(),
     );
   }
 }
 
-class ProgressIndicator extends StatefulWidget {
+class Loading extends StatefulWidget {
+  Loading({Key key}) : super(key: key);
+
   @override
-  _ProgressIndicatorState createState() => new _ProgressIndicatorState();
+  _LoadingState createState() => _LoadingState();
 }
 
-class _ProgressIndicatorState extends State<ProgressIndicator>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> animation;
-
+class _LoadingState extends State<Loading> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
-    animation = Tween(begin: 0.0, end: 1.0).animate(controller)
-      ..addListener(() {
-        setState(() {
-          if (animation.value > 0.99) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()));
-          }
-        });
-      });
-    controller.repeat();
-  }
 
-  @override
-  void dispose() {
-    controller.stop();
-    super.dispose();
+    Timer(
+      Duration(seconds: 3),
+      () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Center(
-        child: new Container(
-      child: CircularProgressIndicator(
-        value: animation.value,
-        valueColor: new AlwaysStoppedAnimation<Color>(Colors.black),
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(color: Colors.yellowAccent),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/wd2.png',
+                scale: 13,
+              ),
+              SpinKitWave(
+                //color: Colors.white,
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: index.isEven ? Colors.black : Colors.grey[300]),
+                  );
+                },
+              )
+            ],
+          )
+        ],
       ),
-    ));
+    );
   }
 }

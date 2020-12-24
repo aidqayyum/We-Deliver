@@ -231,8 +231,14 @@ class _LoginPageState extends State<LoginPage> {
         if (dres[0] == "success") {
           pr.hide();
           print(dres);
-          Admin admin =
-              new Admin(name: dres[1], email: dres[2], phone: dres[3]);
+          Admin admin = new Admin(
+              name: dres[1],
+              email: dres[2],
+              phone: dres[3],
+              delivery: dres[4],
+              radius: dres[5],
+              latitude: dres[5],
+              longitude: dres[6]);
           Navigator.push(
               context,
               MaterialPageRoute(

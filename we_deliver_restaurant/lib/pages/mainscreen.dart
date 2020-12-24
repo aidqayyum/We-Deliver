@@ -144,7 +144,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Column(
         children: [
-          Row(
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
@@ -168,7 +168,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
             ],
-          ),
+          ),*/
           Container(),
           foodList == null
               ? Flexible(
