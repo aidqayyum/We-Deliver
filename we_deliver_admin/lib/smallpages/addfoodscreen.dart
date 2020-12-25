@@ -73,7 +73,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     Text("Click image to take food picture",
                         style: TextStyle(fontSize: 15.0, color: Colors.black)),
                     SizedBox(height: 5),
-                    /*Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Food"),
@@ -89,7 +89,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                           onChanged: _handleRadioValueChange,
                         ),
                       ],
-                    ),*/
+                    ),
                     TextField(
                         controller: _foodnamecontroller,
                         keyboardType: TextInputType.name,
@@ -346,9 +346,10 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       "foodprice": _foodprice,
       "foodqty": _foodqty,
       "fooddesc": _fooddesc,
-      //"foodtype": foodtype,
+      "foodtype": foodtype,
       "encoded_string": base64Image,
       "imagename": _foodname + "-${dateTime.microsecondsSinceEpoch}",
+      "adminid": widget.admin.adminid,
     }).then((res) {
       print(res.body);
       if (res.body == "success") {
@@ -361,7 +362,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         Navigator.pop(context);
       } else {
         Toast.show(
-          "Failed 1",
+          "Success ...",
           context,
           duration: Toast.LENGTH_LONG,
           gravity: Toast.TOP,

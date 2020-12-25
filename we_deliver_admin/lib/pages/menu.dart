@@ -200,6 +200,7 @@ class _MenuState extends State<Menu> {
 
   void _loadFoods(String ftype) {
     http.post("https://itschizo.com/wedeliver/php/load_foods.php", body: {
+      "adminid": widget.admin.adminid,
       "type": ftype,
     }).then((res) {
       print(res.body);
@@ -226,7 +227,8 @@ class _MenuState extends State<Menu> {
         foodprice: foodList[index]['foodprice'],
         foodqty: foodList[index]['foodqty'],
         fooddesc: foodList[index]['fooddesc'],
-        foodimg: foodList[index]['imgname']);
+        foodimg: foodList[index]['imgname'],
+        adminid: widget.admin.adminid);
 
     await Navigator.push(
         context,

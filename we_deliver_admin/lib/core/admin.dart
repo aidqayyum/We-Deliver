@@ -1,5 +1,6 @@
 class Admin {
-  String name,
+  String adminid,
+      name,
       email,
       phone,
       location,
@@ -10,7 +11,8 @@ class Admin {
       delivery;
 
   Admin(
-      {this.name,
+      {this.adminid,
+      this.name,
       this.email,
       this.phone,
       this.location,

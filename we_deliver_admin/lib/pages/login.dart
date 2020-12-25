@@ -232,13 +232,14 @@ class _LoginPageState extends State<LoginPage> {
           pr.hide();
           print(dres);
           Admin admin = new Admin(
-              name: dres[1],
-              email: dres[2],
-              phone: dres[3],
-              delivery: dres[4],
-              radius: dres[5],
-              latitude: dres[5],
-              longitude: dres[6]);
+              adminid: dres[1],
+              name: dres[2],
+              email: dres[3],
+              phone: dres[4],
+              delivery: dres[5],
+              radius: dres[6],
+              latitude: dres[7],
+              longitude: dres[8]);
           Navigator.push(
               context,
               MaterialPageRoute(
