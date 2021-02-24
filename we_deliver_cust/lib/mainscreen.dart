@@ -1,0 +1,494 @@
+import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:toast/toast.dart';
+import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:we_deliver_cust/profile.dart';
+import 'package:we_deliver_cust/restaurant.dart';
+import 'package:we_deliver_cust/restdetails.dart';
+import 'package:we_deliver_cust/shoppingcartscreen.dart';
+import 'package:we_deliver_cust/user.dart';
+
+String urlgetuser = "https://itschizo.com/wedeliver/php/get_user.php";
+int number = 0;
+
+class MainScreen extends StatefulWidget {
+  final User user;
+
+  const MainScreen({Key key, this.user}) : super(key: key);
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  GlobalKey<RefreshIndicatorState> refreshKey;
+
+  List restList;
+  double screenHeight, screenWidth;
+  String titlecenter = "Loading Restaurant...";
+  var locList = {"Changlun", "Sintok", "Bkt Kayu Hitam"};
+  var ratingList = {"Highest", "Lowest"};
+  bool _visible = false;
+  String selectedLoc = "Changlun";
+  String selectedRating = "Highest";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRestaurant(selectedLoc, selectedRating);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    TextEditingController _foodnamecontroller = TextEditingController();
+
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.yellowAccent,
+        brightness: Brightness.light,
+        elevation: 0,
+        actions: <Widget>[
+          Container(
+              width: screenWidth / 2.2,
+              padding: EdgeInsets.fromLTRB(3, 10, 1, 10),
+              child: TextField(
+                autofocus: false,
+                controller: _foodnamecontroller,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: new OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(5.0),
+                    ),
+                  ),
+                  prefixIcon: Icon(Icons.fastfood),
+                ),
+              )),
+          SizedBox(width: 5),
+          Flexible(
+            child: IconButton(
+              icon: Icon(Icons.search),
+              iconSize: 24,
+              onPressed: () {
+                _loadSearchFood(
+                    selectedLoc, selectedRating, _foodnamecontroller.text);
+              },
+            ),
+          ),
+          Flexible(
+            child: IconButton(
+              icon: Icon(Icons.restore),
+              iconSize: 24,
+              onPressed: () {
+                _loadRestaurant(selectedLoc, selectedRating);
+              },
+            ),
+          ),
+          IconButton(
+            icon: _visible
+                ? new Icon(Icons.expand_more)
+                : new Icon(Icons.expand_less),
+            onPressed: () {
+              setState(() {
+                if (_visible) {
+                  _visible = false;
+                } else {
+                  _visible = true;
+                }
+              });
+            },
+          ),
+
+          //
+        ],
+      ),
+      /*floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _shoppinCartScreen();
+          //_bookScreen();
+        },
+        icon: Icon(Icons.add_shopping_cart),
+        label: Text("10"),
+      ),*/
+      drawer: Drawer(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(1.0, 23, 0.0, 1.0),
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+                decoration: BoxDecoration(color: Colors.yellowAccent),
+                currentAccountPicture: new CircleAvatar(
+                    radius: 60.0,
+                    backgroundColor: const Color(0xFF778899),
+                    backgroundImage: NetworkImage(
+                        "https://itschizo.com/wedeliver2/profile/user_profile/${widget.user.email}.jpg?dummy=${(number)}'")),
+                accountName: Text(
+                    widget.user.name?.toUpperCase() ?? 'Not register',
+                    style: TextStyle(fontSize: 16, color: Colors.black)),
+                accountEmail: Text(widget.user.email,
+                    style: TextStyle(fontSize: 16, color: Colors.black))),
+            ListTile(
+                leading: Icon(Icons.shopping_cart),
+                title: Text("Order"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ShoppingCartScreen(
+                                user: widget.user,
+                              )));
+                }),
+            ListTile(
+                leading: Icon(Icons.payments_rounded),
+                title: Text("Payment"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                }),
+            ListTile(
+                leading: Icon(Icons.person),
+                title: Text("Profile"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Profile(
+                                user: widget.user,
+                              )));
+                }),
+            Container(
+                child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Container(
+                  child: Column(
+                children: <Widget>[
+                  Divider(),
+                  ListTile(
+                      leading: Icon(Icons.settings),
+                      title: Text('Settings'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                      leading: Icon(Icons.help),
+                      title: Text('Help and Feedback'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                      leading: Icon(Icons.transit_enterexit),
+                      title: Text('Logout'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                      leading: Icon(Icons.exit_to_app),
+                      title: Text('Exit'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      }),
+                ],
+              )),
+            ))
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          //Divider(color: Colors.grey),
+          Visibility(
+              visible: _visible,
+              child: Container(
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Select Location"),
+                          Container(
+                              height: 30,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.red),
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                        5.0) //                 <--- border radius here
+                                    ),
+                              ),
+                              child: DropdownButton(
+                                //sorting dropdownoption
+                                hint: Text(
+                                  'Select Location',
+                                  style: TextStyle(
+                                      //color: Color.fromRGBO(101, 255, 218, 50),
+                                      ),
+                                ), // Not necessary for Option 1
+                                value: selectedLoc,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedLoc = newValue;
+                                    print(selectedLoc);
+                                    _loadRestaurant(
+                                        selectedLoc, selectedRating);
+                                  });
+                                },
+                                items: locList.map((selectedLoc) {
+                                  return DropdownMenuItem(
+                                    child: new Text(selectedLoc.toString(),
+                                        style: TextStyle(color: Colors.black)),
+                                    value: selectedLoc,
+                                  );
+                                }).toList(),
+                              )),
+                        ],
+                      ),
+
+                      SizedBox(width: 10),
+                      //dropdown for sort by
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Rating"),
+                          Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.red),
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                      5.0) //                 <--- border radius here
+                                  ),
+                            ),
+                            child: DropdownButton(
+                              //sorting dropdownoption
+                              hint: Text(
+                                'Rating',
+                                style: TextStyle(
+                                    //color: Color.fromRGBO(101, 255, 218, 50),
+                                    ),
+                              ), // Not necessary for Option 1
+                              value: selectedRating,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectedRating = newValue;
+                                  print(selectedRating);
+                                  _loadRestaurant(selectedLoc, selectedRating);
+                                });
+                              },
+                              items: ratingList.map((selectedRating) {
+                                return DropdownMenuItem(
+                                  child: new Text(selectedRating.toString(),
+                                      style: TextStyle(color: Colors.black)),
+                                  value: selectedRating,
+                                );
+                              }).toList(),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ))),
+          Divider(color: Colors.grey),
+          restList == null
+              ? Flexible(
+                  child: Container(
+                      child: Center(
+                          child: Text(
+                  titlecenter,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ))))
+              : Flexible(
+                  child: RefreshIndicator(
+                      key: refreshKey,
+                      color: Colors.red,
+                      onRefresh: () async {
+                        _loadRestaurant(selectedLoc, selectedRating);
+                      },
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: (screenWidth / screenHeight) / 0.65,
+                        children: List.generate(restList.length, (index) {
+                          return Padding(
+                              padding: EdgeInsets.all(1),
+                              child: Card(
+                                  child: InkWell(
+                                onTap: () => _loadRestaurantDetail(index),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Container(
+                                              height: screenHeight / 4.5,
+                                              width: screenWidth / 1.2,
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://itschizo.com/wedeliver2/images/restaurant_images/${restList[index]['restimage']}.jpg",
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    new CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        new Icon(
+                                                  Icons.broken_image,
+                                                  size: screenWidth / 2,
+                                                ),
+                                              )),
+                                          Positioned(
+                                            child: Container(
+                                                //color: Colors.white,
+                                                margin: EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10))),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                        restList[index]
+                                                            ['restrating'],
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black)),
+                                                    Icon(Icons.star,
+                                                        color: Colors.black),
+                                                  ],
+                                                )),
+                                            bottom: 10,
+                                            right: 10,
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        restList[index]['restname'],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text("RM " +
+                                          restList[index]['restdelivery'] +
+                                          "/KM Delivery fee"),
+                                    ],
+                                  ),
+                                ),
+                              )));
+                        }),
+                      )))
+        ],
+      ),
+    ));
+  }
+
+  Future<void> _loadRestaurant(String loc, String rat) async {
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Loading...");
+    await pr.show();
+    http.post("https://itschizo.com/wedeliver2/php/load_restaurant.php", body: {
+      "location": loc,
+      "rating": rat,
+    }).then((res) {
+      print(res.body);
+      if (res.body == "nodata") {
+        restList = null;
+        setState(() {
+          titlecenter = "No Restaurant Found";
+        });
+      } else {
+        setState(() {
+          var jsondata = json.decode(res.body);
+          restList = jsondata["rest"];
+        });
+      }
+    }).catchError((err) {
+      print(err);
+    });
+    await pr.hide();
+  }
+
+  _loadRestaurantDetail(int index) {
+    print(restList[index]['restname']);
+    Restaurant restaurant = new Restaurant(
+        restid: restList[index]['restid'],
+        restname: restList[index]['restname'],
+        restlocation: restList[index]['restlocation'],
+        restphone: restList[index]['restphone'],
+        restimage: restList[index]['restimage'],
+        restradius: restList[index]['restradius'],
+        restlatitude: restList[index]['restlatitude'],
+        restlongitude: restList[index]['restlongitude'],
+        restdelivery: restList[index]['restdelivery']);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => RestScreenDetails(
+                  rest: restaurant,
+                  user: widget.user,
+                )));
+  }
+
+  void _shoppinCartScreen() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                ShoppingCartScreen(user: widget.user)));
+  }
+
+  _loadSearchFood(String loc, String rat, String fname) async {
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Loading...");
+    await pr.show();
+    http.post("https://itschizo.com/wedeliver2/php/load_restaurant.php",
+        body: {"location": loc, "rating": rat, "foodname": fname}).then((res) {
+      print(res.body);
+      if (res.body == "nodata") {
+        restList = null;
+        setState(() {
+          titlecenter = "No Restaurant Found";
+        });
+        Toast.show(
+          "Search found no result",
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.TOP,
+        );
+      } else {
+        setState(() {
+          var jsondata = json.decode(res.body);
+          restList = jsondata["rest"];
+          Toast.show(
+            "Food search found in the following restaurant/s",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.TOP,
+          );
+        });
+      }
+    }).catchError((err) {
+      print(err);
+    });
+    await pr.hide();
+  }
+
+  // void _bookScreen() {
+  //   Navigator.push(context,
+  //       MaterialPageRoute(builder: (BuildContext context) => BookScreen()));
+  // }
+}
